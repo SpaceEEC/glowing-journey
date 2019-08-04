@@ -8,10 +8,13 @@ config :logger, :console,
 
 import_config "./config.secret.exs"
 
-config :worker, :owners, [218_348_062_828_003_328]
-
 config :lavalink, :lavalink_authority, "localhost:2333"
-config :worker, :etcd_base_url, "http://localhost:2379/v3beta/kv"
+
+config :worker,
+  etcd_base_url: "http://localhost:2379/v3beta/kv",
+  default_prefix: "-",
+  default_locale: Worker.Locale.EN,
+  owners: [218_348_062_828_003_328]
 
 config :sentry,
   environment_name: Mix.env(),

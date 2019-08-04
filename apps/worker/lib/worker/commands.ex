@@ -57,7 +57,7 @@ defmodule Worker.Commands do
 
   def get_user_id(), do: Application.fetch_env!(:worker, :user_id)
 
-  @default_prefix "ß"
+  @default_prefix Application.fetch_env!(:worker, :default_prefix)
   def get_default_prefix(), do: @default_prefix
 
   @mention_prefixes [

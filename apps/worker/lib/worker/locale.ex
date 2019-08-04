@@ -10,7 +10,7 @@ defmodule Worker.Locale do
     Worker.Locale.EN
   ]
 
-  @default Worker.Locale.EN
+  @default Application.fetch_env!(:worker, :default_locale)
 
   @typedoc """
     Module implementing the `Worker.Locale` behavior.
