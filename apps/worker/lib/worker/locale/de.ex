@@ -418,6 +418,20 @@ defmodule Worker.Locale.DE do
     """
   }
 
+  @volume %{
+    LOC_VOLUME_DESCRIPTION: "Setze oder lese die Lautstärke der Wiedergabe.",
+    LOC_VOLUME_USAGES: "**Anwendung**: `volume [NeueLautstärke]",
+    LOC_VOLUME_EXAMPLES: """
+    **Beispiele**:
+    - `volume` (lese aktuelle)
+    - `volume 0` (setze neue)
+    """,
+    LOC_VOLUME_CURRENT: "Die aktuelle Lautstärke ist {{volume}}/1000",
+    LOC_VOLUME_SET: "Neue Lautstärke gesetzt.",
+    LOC_VOLUME_NAN: "Ich konnte diese Lautstärke nicht als Zahl interpretieren.",
+    LOC_VOLUME_OUT_OF_BOUNDS: "Die Lautstärke muss mindestens 0 und maximal 1000 sein."
+  }
+
   @localization %{}
                 |> Map.merge(@blacklist, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@config, &Worker.Locale.raise_duplicate_key/3)
@@ -451,6 +465,7 @@ defmodule Worker.Locale.DE do
                 |> Map.merge(@summon, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@track, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@uptime, &Worker.Locale.raise_duplicate_key/3)
+                |> Map.merge(@volume, &Worker.Locale.raise_duplicate_key/3)
 
   @spec get_string(atom()) :: String.t() | no_return()
   def get_string(key) do

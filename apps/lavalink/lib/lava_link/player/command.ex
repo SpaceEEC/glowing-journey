@@ -141,4 +141,21 @@ defmodule LavaLink.Player.Command do
 
     {:reply, queue, state}
   end
+
+  def volume(%Player{volume: volume} = state) do
+    {:reply, volume, state}
+  end
+
+  def volume(volume, %Player{guild_id: guild_id} = state)
+      when volume in 0..1000 do
+    Message.volume(volume, guild_id)
+    |> Player.send_message()
+
+    state = %Player{state | volume: volume}
+    {:reply, :ok, state}
+  end
+
+  def volume(_volume, %Player{} = state) do
+    {:reply, :error, state}
+  end
 end

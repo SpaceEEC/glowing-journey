@@ -47,7 +47,8 @@ defmodule Worker.Commands do
     Command.Music.Shuffle,
     Command.Music.Skip,
     Command.Music.Stop,
-    Command.Music.Summon
+    Command.Music.Summon,
+    Command.Music.Volume
   ]
 
   @command_map Worker.Commands.Helper.commands_to_map(@commands)

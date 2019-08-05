@@ -127,6 +127,24 @@ defmodule Rpc.LavaLink do
     do_rpc()
   end
 
+  @impl true
+  def volume(guild_id) when is_local() do
+    send_command(guild_id, :volume)
+  end
+
+  def volume(guild_id) do
+    do_rpc()
+  end
+
+  @impl true
+  def volume(guild_id, new_volume) when is_local() do
+    send_command(guild_id, {:volume, new_volume})
+  end
+
+  def volume(guild_id, new_volume) do
+    do_rpc()
+  end
+
   defp send_command(guild_id, command) do
     LavaLink.Player.name()
     |> ExLink.get_player(guild_id)

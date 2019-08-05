@@ -416,6 +416,20 @@ defmodule Worker.Locale.EN do
     """
   }
 
+  @volume %{
+    LOC_VOLUME_DESCRIPTION: "Set or get the volume for the playback.",
+    LOC_VOLUME_USAGES: "**Usage**: `volume [NewVolume]",
+    LOC_VOLUME_EXAMPLES: """
+    **Examples**:
+    - `volume` (get current)
+    - `volume 0` (set new)
+    """,
+    LOC_VOLUME_CURRENT: "The current volume is {{volume}}/1000",
+    LOC_VOLUME_SET: "New volume set.",
+    LOC_VOLUME_NAN: "I could not interpret the voume as a number.",
+    LOC_VOLUME_OUT_OF_BOUNDS: "The volume must be at least 0 and at max 1000."
+  }
+
   @localization %{}
                 |> Map.merge(@blacklist, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@config, &Worker.Locale.raise_duplicate_key/3)
@@ -449,6 +463,7 @@ defmodule Worker.Locale.EN do
                 |> Map.merge(@summon, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@track, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@uptime, &Worker.Locale.raise_duplicate_key/3)
+                |> Map.merge(@volume, &Worker.Locale.raise_duplicate_key/3)
 
   @spec get_string(atom()) :: String.t() | no_return()
   def get_string(key) do

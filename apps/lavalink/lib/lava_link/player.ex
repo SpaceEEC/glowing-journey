@@ -14,6 +14,7 @@ defmodule LavaLink.Player do
             channel_id: nil,
             shard_id: nil,
             # State
+            volume: 100,
             queue: :queue.new(),
             position: 0,
             paused: true,
@@ -42,13 +43,8 @@ defmodule LavaLink.Player do
     state = %__MODULE__{
       client: client,
       guild_id: guild_id,
-      channel_id: nil,
       # TODO: calculate manually
-      shard_id: 0,
-      queue: :queue.new(),
-      paused: true,
-      loop: false,
-      message: nil
+      shard_id: 0
     }
 
     Logger.debug(fn ->

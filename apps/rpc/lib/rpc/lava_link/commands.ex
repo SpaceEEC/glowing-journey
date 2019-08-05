@@ -18,4 +18,6 @@ defmodule Rpc.Player.Commands do
   @callback resume(guild_id) :: boolean
   @callback now_playing(guild_id) :: track
   @callback queue(guild_id) :: queue
+  @callback volume(guild_id) :: non_neg_integer()
+  @callback volume(guild_id, non_neg_integer()) :: :ok | :error
 end
