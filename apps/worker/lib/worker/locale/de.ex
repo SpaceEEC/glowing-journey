@@ -252,7 +252,8 @@ defmodule Worker.Locale.DE do
     LOC_PING_DESCRIPTION: "Pong!",
     LOC_PING_USAGES: "**Anwendung**: `ping`",
     LOC_PING_EXAMPLES: "**Beispiel**: `ping`",
-    LOC_PING_PONG: "Pong!"
+    LOC_PING_PONG: "Pong!",
+    LOC_PING_TIME: "Pong! ({{ping}}ms)"
   }
 
   @play %{

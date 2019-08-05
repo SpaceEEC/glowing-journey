@@ -12,7 +12,31 @@ defmodule Worker.Command.Misc.Ping do
   def triggers(), do: ["ping"]
 
   @impl true
-  def call(command, _) do
-    set_response(command, content: :LOC_PING_PONG)
+  def call(%{message: message} = command, _) do
+    locale = Worker.Locale.fetch!(message)
+
+    response = Worker.Locale.localize_response([content: :LOC_PING_PONG], locale)
+    ping_message = Rest.create_message!(message, response)
+
+    ping_time = to_timestamp(ping_message) - to_timestamp(message)
+
+    response =
+      Worker.Locale.localize_response(
+        [content: {:LOC_PING_TIME, ping: to_string(ping_time)}],
+        locale
+      )
+
+    Rest.edit_message!(ping_message, response)
+
+    command
+  end
+
+  # TODO: remove if available elsewhere
+  defp to_timestamp(%{id: id}), do: to_timestamp(id)
+
+  defp to_timestamp(id) when is_integer(id) do
+    use Bitwise
+
+    id >>> 22
   end
 end
