@@ -416,6 +416,12 @@ defmodule Worker.Locale.EN do
     """
   }
 
+  @voicelog %{
+    LOC_VOICELOG_JOINED: "{{user}} connected to {{new_channel}}.",
+    LOC_VOICELOG_LEFT: "{{user}} disconnected from {{old_channel}}.",
+    LOC_VOICELOG_MOVED: "{{user}} moved from {{old_channel}} to {{new_channel}}."
+  }
+
   @volume %{
     LOC_VOLUME_DESCRIPTION: "Set or get the volume for the playback.",
     LOC_VOLUME_USAGES: "**Usage**: `volume [NewVolume]",
@@ -463,6 +469,7 @@ defmodule Worker.Locale.EN do
                 |> Map.merge(@summon, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@track, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@uptime, &Worker.Locale.raise_duplicate_key/3)
+                |> Map.merge(@voicelog, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@volume, &Worker.Locale.raise_duplicate_key/3)
 
   @spec get_string(atom()) :: String.t() | no_return()

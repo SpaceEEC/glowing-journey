@@ -418,6 +418,12 @@ defmodule Worker.Locale.DE do
     """
   }
 
+  @voicelog %{
+    LOC_VOICELOG_JOINED: "{{user}} loggte sich in {{new_channel}} ein.",
+    LOC_VOICELOG_LEFT: "{{user}} loggte sich aus {{old_channel}} aus.",
+    LOC_VOICELOG_MOVED: "{{user}} ging von {{old_channel}} nach {{new_channel}}."
+  }
+
   @volume %{
     LOC_VOLUME_DESCRIPTION: "Setze oder lese die Lautstärke der Wiedergabe.",
     LOC_VOLUME_USAGES: "**Anwendung**: `volume [NeueLautstärke]",
@@ -465,6 +471,7 @@ defmodule Worker.Locale.DE do
                 |> Map.merge(@summon, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@track, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@uptime, &Worker.Locale.raise_duplicate_key/3)
+                |> Map.merge(@voicelog, &Worker.Locale.raise_duplicate_key/3)
                 |> Map.merge(@volume, &Worker.Locale.raise_duplicate_key/3)
 
   @spec get_string(atom()) :: String.t() | no_return()

@@ -19,10 +19,12 @@ defmodule Worker do
     Rpc.LavaLink.forward(data)
   end
 
-  def handle_event({:VOICE_STATE_UPDATE, {_, state}, _shard_id}) do
-    state
+  def handle_event({:VOICE_STATE_UPDATE, {old_state, new_state}, _shard_id}) do
+    new_state
     |> Map.from_struct()
     |> Rpc.LavaLink.forward()
+
+    Worker.Handler.VoiceLog.handle(old_state, new_state)
   end
 
   def handle_event(_), do: nil
