@@ -13,7 +13,21 @@ defmodule Worker.Command.Config.Locale do
   @impl true
   def triggers(), do: ["locale", "lang", "language"]
   @impl true
-  def required(), do: [MiddleWare.GuildOnly]
+  def required() do
+    [
+      MiddleWare.GuildOnly,
+      {MiddleWare.HasPermissions,
+       {
+         :manage_guild,
+         nil,
+         :member,
+         fn
+           %{args: []} -> true
+           _ -> false
+         end
+       }}
+    ]
+  end
 
   @impl true
   def call(%{args: []} = command, _) do

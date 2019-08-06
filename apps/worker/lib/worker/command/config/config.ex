@@ -26,7 +26,9 @@ defmodule Worker.Command.Config do
   @impl true
   def triggers(), do: ["config", "conf"]
   @impl true
-  def required(), do: [MiddleWare.GuildOnly]
+  def required() do
+    [MiddleWare.GuildOnly, {MiddleWare.HasPermissions, {:manage_guild, nil, :member}}]
+  end
 
   @impl true
   def call(%{args: []} = command, _) do
