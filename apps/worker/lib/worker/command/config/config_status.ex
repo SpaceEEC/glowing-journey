@@ -1,7 +1,7 @@
 defmodule Worker.Command.Config.ConfigStatus do
   use Worker.Command
 
-  alias Worker.Config.Guild
+  alias Util.Config.Guild
 
   @impl true
   def description(), do: :LOC_CONFIGSTATUS_DESCRIPTION
@@ -15,7 +15,7 @@ defmodule Worker.Command.Config.ConfigStatus do
   @impl true
   def triggers(), do: ["config-status", "conf-status"]
   @impl true
-  def required(), do: [Worker.MiddleWare.GuildOnly]
+  def required(), do: [MiddleWare.GuildOnly]
 
   @impl true
   def call(%{message: %{guild_id: guild_id}} = command, _) do

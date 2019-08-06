@@ -5,6 +5,7 @@ defmodule LavaLink.Player do
 
   alias Rpc.{Rest, Gateway}
   alias LavaLink.Track
+  alias Util.Locale
 
   require Logger
 
@@ -296,9 +297,8 @@ defmodule LavaLink.Player do
   end
 
   def set_message(%{message: nil, guild_id: guild_id, channel_id: channel_id} = state, data) do
-    # TODO: Do not require Worker.*
-    locale = Worker.Locale.fetch!(guild_id)
-    data = Worker.Locale.localize_response(data, locale)
+    locale = Locale.fetch!(guild_id)
+    data = Locale.localize_response(data, locale)
 
     case Rest.create_message(channel_id, data) do
       {:ok, message} ->
@@ -314,8 +314,8 @@ defmodule LavaLink.Player do
   end
 
   def set_message(%{guild_id: guild_id, message: message} = state, data) do
-    locale = Worker.Locale.fetch!(guild_id)
-    data = Worker.Locale.localize_response(data, locale)
+    locale = Locale.fetch!(guild_id)
+    data = Locale.localize_response(data, locale)
 
     case Rest.edit_message(message, data) do
       {:ok, message} ->

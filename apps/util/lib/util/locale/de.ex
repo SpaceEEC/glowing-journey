@@ -1,5 +1,5 @@
-defmodule Worker.Locale.DE do
-  @behaviour Worker.Locale
+defmodule Util.Locale.DE do
+  @behaviour Util.Locale
 
   def code(), do: "DE"
   def friendly_name(), do: "German (Deutsch)"
@@ -28,7 +28,7 @@ defmodule Worker.Locale.DE do
     Setze, lese oder lösche einen Konfigurationseintrag.
 
     Aktuell unterstütze Schlüssel sind: `#{
-      Worker.Config.Guild.get_keys() |> Enum.map_join("`, `", &String.replace(&1, "_", ""))
+      Util.Config.Guild.get_keys() |> Enum.map_join("`, `", &String.replace(&1, "_", ""))
     }`
     """,
     LOC_CONFIG_USAGES: """
@@ -439,40 +439,40 @@ defmodule Worker.Locale.DE do
   }
 
   @localization %{}
-                |> Map.merge(@blacklist, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@config, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@configstatus, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@connected, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@dj, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@eval, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@fetchguild, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@fetchmember, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@generic, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@haspermissions, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@help, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@info, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@invite, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@leave, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@locale, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@loop, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@nowplaying, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@owneronly, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@pause, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@ping, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@play, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@prefix, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@queue, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@remove, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@resume, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@save, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@shuffle, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@skip, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@stop, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@summon, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@track, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@uptime, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@voicelog, &Worker.Locale.raise_duplicate_key/3)
-                |> Map.merge(@volume, &Worker.Locale.raise_duplicate_key/3)
+                |> Map.merge(@blacklist, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@config, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@configstatus, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@connected, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@dj, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@eval, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@fetchguild, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@fetchmember, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@generic, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@haspermissions, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@help, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@info, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@invite, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@leave, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@locale, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@loop, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@nowplaying, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@owneronly, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@pause, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@ping, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@play, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@prefix, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@queue, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@remove, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@resume, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@save, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@shuffle, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@skip, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@stop, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@summon, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@track, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@uptime, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@voicelog, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@volume, &Util.Locale.raise_duplicate_key/3)
 
   @spec get_string(atom()) :: String.t() | no_return()
   def get_string(key) do

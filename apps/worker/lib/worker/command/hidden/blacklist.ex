@@ -1,7 +1,7 @@
 defmodule Worker.Command.Hidden.Blacklist do
   use Worker.Command
 
-  alias Worker.Config.Global
+  alias Util.Config.Global
 
   @impl true
   def description(), do: :LOC_BLACKLIST_DESCRIPTION

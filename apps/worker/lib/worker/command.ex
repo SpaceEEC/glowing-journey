@@ -9,7 +9,7 @@ defmodule Worker.Command do
     end
   end
 
-  @callback description() :: Worker.Locale.localizable()
-  @callback usages() :: Worker.Locale.localizable()
-  @callback examples() :: Worker.Locale.localizable()
+  @callback description() :: Util.Locale.localizable()
+  @callback usages() :: Util.Locale.localizable()
+  @callback examples() :: Util.Locale.localizable()
 end

@@ -2,8 +2,8 @@ defmodule Mix.Tasks.Locale do
   use Mix.Task
 
   @file_template """
-  defmodule Worker.Locale.{{lang}} do
-    @behaviour Worker.Locale
+  defmodule Util.Locale.{{lang}} do
+    @behaviour Util.Locale
 
     def code(), do: "{{lang}}"
     def friendly_name(), do: "{{friendly_name}}"
@@ -26,7 +26,7 @@ defmodule Mix.Tasks.Locale do
   """
 
   @merge_template """
-  |> Map.merge(@{{name}}, &Worker.Locale.raise_duplicate_key/3)
+  |> Map.merge(@{{name}}, &Util.Locale.raise_duplicate_key/3)
   """
 
   @impl true
@@ -37,7 +37,7 @@ defmodule Mix.Tasks.Locale do
       |> Enum.slice(0..-5)
       |> Path.join()
 
-    locale_prefix = Path.join(apps_dir, Path.join(["worker", "lib", "worker", "locale"]))
+    locale_prefix = Path.join(apps_dir, Path.join(["util", "lib", "util", "locale"]))
 
     groups =
       apps_dir

@@ -2,7 +2,7 @@ defmodule Rpc.LavaLink.Track do
   use Rpc, :lavalink
 
   def to_embed(track, type) when is_local() do
-    LavaLink.Track.to_embed(track, type)
+    ensure_loaded(LavaLink.Track).to_embed(track, type)
   end
 
   def to_embed(track, type) do
@@ -10,7 +10,7 @@ defmodule Rpc.LavaLink.Track do
   end
 
   def to_length(track) when is_local() do
-    LavaLink.Track.to_length(track)
+    ensure_loaded(LavaLink.Track).to_length(track)
   end
 
   def to_length(track) do
@@ -18,7 +18,7 @@ defmodule Rpc.LavaLink.Track do
   end
 
   def to_markdown_uri(track) when is_local() do
-    LavaLink.Track.to_markdown_uri(track)
+    ensure_loaded(LavaLink.Track).to_markdown_uri(track)
   end
 
   def to_markdown_uri(track) do
@@ -26,7 +26,7 @@ defmodule Rpc.LavaLink.Track do
   end
 
   def format_milliseconds(millis) when is_local() do
-    LavaLink.Track.format_milliseconds(millis)
+    ensure_loaded(LavaLink.Track).format_milliseconds(millis)
   end
 
   def format_milliseconds(millis) do

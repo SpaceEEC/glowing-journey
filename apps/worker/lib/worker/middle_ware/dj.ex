@@ -9,13 +9,14 @@ defmodule Worker.MiddleWare.DJ do
   """
   use Worker.MiddleWare
 
-  alias Worker.Config.Guild
+  alias Util.Config.Guild
 
   require Logger
 
   @impl true
-  def required(),
-    do: [MiddleWare.GuildOnly, MiddleWare.FetchGuild, {MiddleWare.FetchMember, :member}]
+  def required() do
+    [MiddleWare.GuildOnly, MiddleWare.FetchGuild, {MiddleWare.FetchMember, :member}]
+  end
 
   @impl true
   def call(command, predicate) when is_function(predicate, 1) do
@@ -68,7 +69,7 @@ defmodule Worker.MiddleWare.DJ do
     if MapSet.member?(channels, dj_channel_id) do
       dj_channel_id
     else
-      Logger.debug(fn -> "Configured dj channel in guild #{guild_id} deleted." end)
+      Logger.debug(fn -> "Configured dj channel in guild #{guild_id} deleted; Removing..." end)
 
       # Channel does not exist, remove from config
       1 = Guild.delete_dj_channel(guild_id)
@@ -87,7 +88,7 @@ defmodule Worker.MiddleWare.DJ do
   # Roles does not exist, remove from config
   defp ensure_role(dj_role_id, %{id: guild_id})
        when is_integer(dj_role_id) do
-    Logger.debug(fn -> "Configured dj role in guild #{guild_id} deleted." end)
+    Logger.debug(fn -> "Configured dj role in guild #{guild_id} deleted; Removing..." end)
 
     1 = Guild.delete_dj_role(guild_id)
     nil

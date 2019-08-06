@@ -1,5 +1,5 @@
-defmodule Worker.Config.Global do
-  alias Worker.Config.Etcd
+defmodule Util.Config.Global do
+  alias Util.Config.Etcd
 
   @blacklist_prefix "global:blacklist:"
 

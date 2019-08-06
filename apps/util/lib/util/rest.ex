@@ -1,4 +1,4 @@
-defmodule Worker.Rest do
+defmodule Util.Rest do
   @moduledoc false
 
   use HTTPoison.Base

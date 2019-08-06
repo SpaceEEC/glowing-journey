@@ -27,6 +27,7 @@ defmodule LavaLink.MixProject do
   defp deps do
     [
       {:rpc, in_umbrella: true},
+      {:util, in_umbrella: true},
       {:ex_link, github: "spaceeec/ex_link"},
       {:httpoison, "~> 1.1.1"}
     ]

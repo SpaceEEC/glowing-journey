@@ -13,7 +13,7 @@ defmodule Worker.Command.Config.Locale do
   @impl true
   def triggers(), do: ["locale", "lang", "language"]
   @impl true
-  def required(), do: [Worker.MiddleWare.GuildOnly]
+  def required(), do: [MiddleWare.GuildOnly]
 
   @impl true
   def call(%{args: []} = command, _) do

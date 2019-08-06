@@ -10,10 +10,12 @@ import_config "./config.secret.exs"
 
 config :lavalink, :lavalink_authority, "localhost:2333"
 
-config :worker,
+config :util,
   etcd_base_url: "http://localhost:2379/v3beta/kv",
-  default_prefix: "-",
-  default_locale: Worker.Locale.EN,
+  default_locale: Util.Locale.EN
+
+config :worker,
+  default_prefix: "ß",
   owners: [218_348_062_828_003_328]
 
 config :sentry,

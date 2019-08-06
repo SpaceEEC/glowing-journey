@@ -1,6 +1,7 @@
 defmodule Worker.Handler.VoiceLog do
   alias Rpc.{Cache, Rest}
-  alias Worker.Config.Guild
+  alias Util.Config.Guild
+  alias Util.Locale
   def handle(nil, state), do: handle(%{channel_id: nil}, state)
 
   def handle(
@@ -18,7 +19,6 @@ defmodule Worker.Handler.VoiceLog do
       end
 
     if channel_id = Guild.get_voice_log_channel(guild_id) do
-      locale = Worker.Locale.fetch!(guild_id)
 
       {key, color} =
         case {old_channel_id, new_channel_id} do
@@ -46,7 +46,8 @@ defmodule Worker.Handler.VoiceLog do
         timestamp: DateTime.utc_now() |> DateTime.to_iso8601()
       }
 
-      response = Worker.Locale.localize_response([embed: embed], locale)
+      locale = Locale.fetch!(guild_id)
+      response = Locale.localize_response([embed: embed], locale)
 
       case Rest.create_message(channel_id, response) do
         {:ok, _message} ->

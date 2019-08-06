@@ -52,6 +52,15 @@ defmodule Rpc do
           )
         end
       end
+
+      defmacro ensure_loaded(mod) do
+        quote do
+          mod = unquote(mod)
+          {:module, ^mod} = Code.ensure_loaded(mod)
+
+          mod
+        end
+      end
     end
   end
 

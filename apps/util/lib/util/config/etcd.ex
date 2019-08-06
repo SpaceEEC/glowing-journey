@@ -1,13 +1,13 @@
-defmodule Worker.Config.Etcd do
+defmodule Util.Config.Etcd do
   @moduledoc """
     Config provider using [`etcd`](https://github.com/etcd-io/etcd) as backing.
 
     Using the [`kv`](https://github.com/etcd-io/etcd/blob/master/Documentation/dev-guide/api_reference_v3.md#service-kv-etcdserveretcdserverpbrpcproto) service.
   """
 
-  alias Worker.Rest
+  alias Util.Rest
 
-  @base_url Application.fetch_env!(:worker, :etcd_base_url)
+  @base_url Application.fetch_env!(:util, :etcd_base_url)
 
   @doc """
     Gets a value via key.

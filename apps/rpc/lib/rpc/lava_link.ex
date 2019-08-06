@@ -8,8 +8,8 @@ defmodule Rpc.LavaLink do
     require Logger
     Logger.debug(fn -> "Forwarding #{inspect(data)}" end)
 
-    LavaLink.Player.name()
-    |> ExLink.Connection.forward(data)
+    ensure_loaded(LavaLink.Player).name()
+    |> ensure_loaded(ExLink.Connection).forward(data)
   end
 
   def forward(data) do
@@ -17,9 +17,11 @@ defmodule Rpc.LavaLink do
   end
 
   def resolve_identifier_and_fetch_tracks(identifier, requester) when is_local() do
+    rest_mod = ensure_loaded(LavaLink.Rest)
+
     identifier
-    |> LavaLink.Rest.resolve_identifier()
-    |> LavaLink.Rest.fetch_tracks(requester)
+    |> rest_mod.resolve_identifier()
+    |> rest_mod.fetch_tracks(requester)
   end
 
   def resolve_identifier_and_fetch_tracks(identifier, requester) do
@@ -146,20 +148,20 @@ defmodule Rpc.LavaLink do
   end
 
   defp send_command(guild_id, command) do
-    LavaLink.Player.name()
-    |> ExLink.get_player(guild_id)
+    ensure_loaded(LavaLink.Player).name()
+    |> ensure_loaded(ExLink.Player).get_player(guild_id)
     |> case do
       :error ->
         :error
 
       pid ->
-        ExLink.Player.call(pid, {:command, command})
+        ensure_loaded(ExLink.Player).call(pid, {:command, command})
     end
   end
 
   defp send_call(guild_id, data) do
-    LavaLink.Player.name()
-    |> ExLink.ensure_player(guild_id)
-    |> ExLink.Player.call(data)
+    ensure_loaded(LavaLink.Player).name()
+    |> ensure_loaded(ExLink).ensure_player(guild_id)
+    |> ensure_loaded(ExLink.Player).call(data)
   end
 end

@@ -73,10 +73,10 @@ defmodule LavaLink.Track do
     "[#{title}](#{uri})"
   end
 
-  @spec to_length(LavaLink.Track.t()) :: Worker.Locale.localizable()
+  @spec to_length(LavaLink.Track.t()) :: Util.Locale.localizable()
   def to_length(%__MODULE__{length: length}), do: format_milliseconds(length)
 
-  @spec to_info(LavaLink.Track.t()) :: Worker.Locale.localizable()
+  @spec to_info(LavaLink.Track.t()) :: Util.Locale.localizable()
   def to_info(track, type \\ nil)
 
   def to_info(%__MODULE__{} = track, :now_playing) do

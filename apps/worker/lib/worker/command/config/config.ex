@@ -2,14 +2,16 @@ defmodule Worker.Command.Config do
   use Worker.Command
 
   alias Worker.Resolver
+  alias Util.Config.Guild
+  alias Util.Locale
 
   @actions ~w(set get delete)
-  @friendly_to_internal Worker.Config.Guild.get_keys()
+  @friendly_to_internal Guild.get_keys()
                         |> Map.new(&{String.replace(&1, "_", ""), &1})
   @keys @friendly_to_internal |> Map.keys()
-  @string_keys Worker.Config.Guild.string_keys()
-  @channel_keys Worker.Config.Guild.channel_keys()
-  @role_keys Worker.Config.Guild.role_keys()
+  @string_keys Guild.string_keys()
+  @channel_keys Guild.channel_keys()
+  @role_keys Guild.role_keys()
 
   @impl true
   def description(long_or_short \\ :short)
@@ -24,7 +26,7 @@ defmodule Worker.Command.Config do
   @impl true
   def triggers(), do: ["config", "conf"]
   @impl true
-  def required(), do: [Worker.MiddleWare.GuildOnly]
+  def required(), do: [MiddleWare.GuildOnly]
 
   @impl true
   def call(%{args: []} = command, _) do
@@ -62,7 +64,7 @@ defmodule Worker.Command.Config do
     case transform_value(command, internal_key, value) do
       {:ok, value} ->
         fun = String.to_existing_atom("put_#{internal_key}")
-        apply(Worker.Config.Guild, fun, [guild_id, value])
+        apply(Guild, fun, [guild_id, value])
 
         set_response(command, content: {:LOC_CONFIG_PUT_VALUE, key: key})
 
@@ -73,7 +75,7 @@ defmodule Worker.Command.Config do
 
   def get(%{message: %{guild_id: guild_id}} = command, key, _) do
     fun = String.to_existing_atom("get_#{Map.fetch!(@friendly_to_internal, key)}")
-    value = apply(Worker.Config.Guild, fun, [guild_id])
+    value = apply(Guild, fun, [guild_id])
 
     content =
       cond do
@@ -86,7 +88,7 @@ defmodule Worker.Command.Config do
         key == "locale" ->
           value =
             nil
-            |> Worker.Locale.fetch!()
+            |> Locale.fetch!()
             |> Module.split()
             |> List.last()
             |> to_string()
@@ -102,7 +104,7 @@ defmodule Worker.Command.Config do
 
   def delete(%{message: %{guild_id: guild_id}} = command, key, _) do
     fun = String.to_existing_atom("delete_#{Map.fetch!(@friendly_to_internal, key)}")
-    deleted = apply(Worker.Config.Guild, fun, [guild_id])
+    deleted = apply(Guild, fun, [guild_id])
 
     if deleted > 0 do
       set_response(command, content: {:LOC_CONFIG_DELETED, key: key})
@@ -127,7 +129,7 @@ defmodule Worker.Command.Config do
   end
 
   defp transform_value(_command, "locale", value) do
-    names = Worker.Locale.get_names()
+    names = Locale.get_names()
 
     if Map.has_key?(names, String.upcase(value)) do
       {:ok, String.upcase(value)}

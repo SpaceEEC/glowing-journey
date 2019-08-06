@@ -1,5 +1,5 @@
-defmodule Worker.Config.Guild do
-  alias Worker.Config.Etcd
+defmodule Util.Config.Guild do
+  alias Util.Config.Etcd
 
   @string_keys ~w(join_message leave_message)
   @role_keys ~w(dj_role)

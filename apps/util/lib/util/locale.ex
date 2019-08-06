@@ -1,19 +1,19 @@
-defmodule Worker.Locale do
+defmodule Util.Locale do
   @moduledoc """
     Module handling the localization of strings.
   """
 
-  alias Worker.Config.Guild
+  alias Util.Config.Guild
 
   @locales [
-    Worker.Locale.DE,
-    Worker.Locale.EN
+    Util.Locale.DE,
+    Util.Locale.EN
   ]
 
-  @default Application.fetch_env!(:worker, :default_locale)
+  @default Application.fetch_env!(:util, :default_locale)
 
   @typedoc """
-    Module implementing the `Worker.Locale` behavior.
+    Module implementing the `Util.Locale` behavior.
   """
   @type locale :: module()
 
@@ -73,7 +73,7 @@ defmodule Worker.Locale do
         @default
 
       mod ->
-        Module.safe_concat(Worker.Locale, mod)
+        Module.safe_concat(Util.Locale, mod)
     end
   end
 

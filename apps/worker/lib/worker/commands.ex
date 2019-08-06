@@ -17,7 +17,9 @@ defmodule Worker.Commands.Helper do
 end
 
 defmodule Worker.Commands do
-  alias Worker.{Command, Locale}
+  alias Worker.Command
+  alias Util.Config.{Global, Guild}
+  alias Util.Locale
 
   @commands [
     Command.Config.ConfigStatus,
@@ -104,7 +106,7 @@ defmodule Worker.Commands do
   defp get_prefixes(%{guild_id: nil}), do: [@default_prefix | @mention_prefixes] ++ [""]
 
   defp get_prefixes(message) do
-    guild_prefix = Worker.Config.Guild.get_prefix(message.guild_id, @default_prefix)
+    guild_prefix = Guild.get_prefix(message.guild_id, @default_prefix)
 
     [guild_prefix | @mention_prefixes]
   end
@@ -160,8 +162,6 @@ defmodule Worker.Commands do
   defp check_blacklist(
          {:ok, _mod, %{message: %{guild_id: guild_id, author: %{id: user_id}}}} = tuple
        ) do
-    alias Worker.Config.Global
-
     if Global.blacklisted?(user_id) or Global.blacklisted?(guild_id) do
       {:error, :blacklisted}
     else

@@ -6,13 +6,13 @@ defmodule Rpc.Cache do
 
   # Exceptions, those only exist on user
   def me() when is_local() do
-    Crux.Cache.User.me()
+    ensure_loaded(Crux.Cache.User).me()
   end
 
   def me(), do: do_rpc()
 
   def me!() when is_local() do
-    Crux.Cache.User.me!()
+    ensure_loaded(Crux.Cache.User).me!()
   end
 
   def me!(), do: do_rpc()
@@ -20,7 +20,7 @@ defmodule Rpc.Cache do
   # Helper
   def get_channels(ids) when is_local() and is_list(ids) do
     Enum.flat_map(ids, fn id ->
-      case Crux.Cache.Channel.fetch(id) do
+      case ensure_loaded(Crux.Cache.Channel).fetch(id) do
         {:ok, channel} -> [channel]
         :error -> []
       end
@@ -34,6 +34,7 @@ defmodule Rpc.Cache do
   # General cache api, all caches implement them
   def delete(type, id) when is_local() and type in @types do
     mod = Module.safe_concat(Crux.Cache, type)
+
     apply(mod, :delete, [id])
   end
 
@@ -43,6 +44,7 @@ defmodule Rpc.Cache do
 
   def fetch(type, id) when is_local() and type in @types do
     mod = Module.safe_concat(Crux.Cache, type)
+
     apply(mod, :fetch, [id])
   end
 
@@ -52,6 +54,7 @@ defmodule Rpc.Cache do
 
   def fetch!(type, id) when is_local() and type in @types do
     mod = Module.safe_concat(Crux.Cache, type)
+
     apply(mod, :fetch!, [id])
   end
 
@@ -61,6 +64,7 @@ defmodule Rpc.Cache do
 
   def insert(type, data) when is_local() and type in @types do
     mod = Module.safe_concat(Crux.Cache, type)
+
     apply(mod, :insert, [data])
   end
 
@@ -70,6 +74,7 @@ defmodule Rpc.Cache do
 
   def update(type, data) when is_local() and type in @types do
     mod = Module.safe_concat(Crux.Cache, type)
+
     apply(mod, :update, [data])
   end
 
