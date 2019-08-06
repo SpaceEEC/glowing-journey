@@ -98,6 +98,21 @@ defmodule Worker.Commands do
         run_command(command)
       rescue
         error ->
+          {:ok, mod, _command} = command
+
+          Sentry.capture_exception(
+            error,
+            stacktrace: __STACKTRACE__,
+            tags: %{
+              command: mod.triggers() |> List.first(),
+              shard_id: shard_id
+            },
+            user: %{
+              user_id: message.author.id,
+              guild_id: message.guild_id
+            }
+          )
+
           {:error, error, __STACKTRACE__}
       end
 
