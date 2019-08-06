@@ -5,7 +5,7 @@ defmodule Util.Locale.DE do
   def friendly_name(), do: "German (Deutsch)"
 
   @blacklist %{
-    LOC_BLACKLIST_DESCRIPTION: "Blackliste einen Nutzer auf diesem Server oder hebe dieser auf.",
+    LOC_BLACKLIST_DESCRIPTION: "Blackliste einen Nutzer auf diesem Server oder hebe diesen auf.",
     LOC_BLACKLIST_USAGES: """
     **Anwendungen**:
     - `blacklist`
