@@ -28,7 +28,7 @@ defmodule Util.Config.Guild do
   end
 
   def get_all(guild) do
-    id = resolve_guild_id(guild)
+    id = Util.resolve_guild_id(guild)
     prefix = "#{@guild_prefix}:#{id}:"
     prefix_size = byte_size(prefix)
 
@@ -38,19 +38,50 @@ defmodule Util.Config.Guild do
     end)
   end
 
-  defp resolve_guild_id(%{id: id}), do: id
-  defp resolve_guild_id(id) when is_binary(id) or is_integer(id), do: id
+  ## blacklist
+
+  def blacklisted?(guild, user) do
+    guild_id = Util.resolve_guild_id!(guild)
+    user_id = Util.resolve_user_id!(user)
+
+    Etcd.get("#{@guild_prefix}:#{guild_id}:blacklist:#{user_id}", nil) != nil
+  end
+
+  def blacklist(guild, user, blacklist) do
+    guild_id = Util.resolve_guild_id!(guild)
+    user_id = Util.resolve_user_id!(user)
+
+    if blacklist do
+      Etcd.put("#{@guild_prefix}:#{guild_id}:blacklist:#{user_id}", "true")
+    else
+      Etcd.delete("#{@guild_prefix}:#{guild_id}:blacklist:#{user_id}")
+    end
+  end
+
+  def get_blacklisted(guild) do
+    guild_id = Util.resolve_guild_id!(guild)
+
+    prefix = "#{@guild_prefix}:#{guild_id}:blacklist:"
+    prefix_size = byte_size(prefix)
+
+    Etcd.range_prefix(prefix)
+    |> MapSet.new(fn {<<_::binary-size(prefix_size), id::binary>>, _v} ->
+      String.to_integer(id)
+    end)
+  end
+
+  ## blacklist end
 
   defp put(key, guild, value)
        when key in @keys and is_binary(value) do
-    id = resolve_guild_id(guild)
+    id = Util.resolve_guild_id!(guild)
 
     Etcd.put("#{@guild_prefix}:#{id}:#{key}", value)
   end
 
   defp get(key, guild, default)
        when key in @keys do
-    id = resolve_guild_id(guild)
+    id = Util.resolve_guild_id!(guild)
 
     value = Etcd.get("#{@guild_prefix}:#{id}:#{key}", default)
 
@@ -63,7 +94,7 @@ defmodule Util.Config.Guild do
 
   defp delete(key, guild)
        when key in @keys do
-    id = resolve_guild_id(guild)
+    id = Util.resolve_guild_id!(guild)
 
     Etcd.delete("#{@guild_prefix}:#{id}:#{key}")
   end

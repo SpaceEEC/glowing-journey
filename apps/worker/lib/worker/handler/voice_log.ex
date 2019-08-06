@@ -19,7 +19,6 @@ defmodule Worker.Handler.VoiceLog do
       end
 
     if channel_id = Guild.get_voice_log_channel(guild_id) do
-
       {key, color} =
         case {old_channel_id, new_channel_id} do
           {nil, _} ->

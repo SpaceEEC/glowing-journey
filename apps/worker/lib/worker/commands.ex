@@ -22,6 +22,7 @@ defmodule Worker.Commands do
   alias Util.Locale
 
   @commands [
+    Command.Config.Blacklist,
     Command.Config.ConfigStatus,
     Command.Config,
     Command.Config.Locale,
@@ -85,7 +86,7 @@ defmodule Worker.Commands do
 
     command =
       if message.author.id not in get_owners() do
-        check_blacklist(command)
+        check_blacklists(command)
       else
         command
       end
@@ -157,15 +158,23 @@ defmodule Worker.Commands do
     end
   end
 
-  defp check_blacklist({:error, _} = error), do: error
+  defp check_blacklists({:error, _} = error), do: error
 
-  defp check_blacklist(
+  defp check_blacklists(
          {:ok, _mod, %{message: %{guild_id: guild_id, author: %{id: user_id}}}} = tuple
        ) do
-    if Global.blacklisted?(user_id) or Global.blacklisted?(guild_id) do
-      {:error, :blacklisted}
-    else
-      tuple
+    cond do
+      Global.blacklisted?(user_id) ->
+        {:error, {:blacklist, :global_user}}
+
+      Global.blacklisted?(guild_id) ->
+        {:error, {:blacklist, :global_guild}}
+
+      Guild.blacklisted?(guild_id, user_id) ->
+        {:error, {:blacklist, :local_guild}}
+
+      true ->
+        tuple
     end
   end
 
@@ -197,6 +206,8 @@ defmodule Worker.Commands do
 
   defp send_response({:error, :no_prefix}, _message), do: nil
   defp send_response({:error, {:no_command, _command}}, _message), do: nil
+
+  defp send_response({:error, {:blacklist, _type}}, _message), do: nil
 
   defp send_response({:error, error, stacktrace}, message) do
     IO.inspect(error)

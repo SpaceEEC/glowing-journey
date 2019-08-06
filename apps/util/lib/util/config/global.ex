@@ -3,8 +3,9 @@ defmodule Util.Config.Global do
 
   @blacklist_prefix "global:blacklist:"
 
-  @spec blacklisted?(user_or_guild_or_id :: %{id: Crux.Rest.snowflake()} | Crux.Rest.snowflake()) ::
-          boolean()
+  @spec blacklisted?(
+          user_or_guild_or_id_or_nil :: %{id: Crux.Rest.snowflake()} | Crux.Rest.snowflake() | nil
+        ) :: boolean()
   def blacklisted?(%{id: id}), do: blacklisted?(id)
 
   def blacklisted?(nil), do: false

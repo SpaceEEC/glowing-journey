@@ -5,19 +5,33 @@ defmodule Util.Locale.DE do
   def friendly_name(), do: "German (Deutsch)"
 
   @blacklist %{
-    LOC_BLACKLIST_DESCRIPTION: "Blacklist or unblacklist a user or guild.",
+    LOC_BLACKLIST_DESCRIPTION: "Blackliste einen Nutzer auf diesem Server oder hebe dieser auf.",
     LOC_BLACKLIST_USAGES: """
     **Anwendungen**:
-    - `blacklist` (get all)
-    - `blacklist [UserID|GuildID]` (blacklist)
-    - `blacklist remove [UserID|GuilID]` (unblacklist)
+    - `blacklist`
+    - `blacklist [UserID]`
+    - `blacklist remove [UserID]`
     """,
     LOC_BLACKLIST_EXAMPLES: """
     **Beispiele**:
-    - `blacklist` (get all)
-    - `blacklist 218348062828003328` (blacklist)
-    - `blacklist remove 218348062828003328` (unblacklist)
-    """
+    - `blacklist`
+    - `blacklist 218348062828003328`
+    - `blacklist remove 218348062828003328`
+    """,
+    LOC_BLACKLIST_NO_USER: "Ich konnte keinen Nutzer mithilfe von ``{{user}}`` finden.",
+    LOC_BLACKLIST_BOT: "Nicht nötig, ich ignoriere bereits sämtliche Bots.",
+    LOC_BLACKLIST_SELF: "Sich selbst auf die Blacklist schreiben? Ich denke nicht.",
+    LOC_BLACKLIST_PRIVILIGED: """
+    Privilegierte Nutzer können nicht auf die Blacklist geschrieben werden.
+    """,
+    LOC_BLACKLIST_BLACKLISTED: """
+    ``{{user}}`` befindet sich von nun an auf der Blacklist und kann auf diesem Server keinerlei Befehle mehr verwenden.
+    """,
+    LOC_BLACKLIST_NOT_BLACKLISTED: "``{{user}}`` befindet sich nicht auf der Blacklist.",
+    LOC_BLACKLIST_UNBLACKLISTED: """
+    ``{{user}}`` befindet sich nicht länger auf der Blacklist und kann nun wieder Befehle auf diesem Server verwenden.
+    """,
+    LOC_BLACKLIST_EMBED_TITLE: "Auf diesem Server gesperrt:"
   }
 
   @config %{
@@ -277,7 +291,7 @@ defmodule Util.Locale.DE do
   }
 
   @prefix %{
-    LOC_PREFIX_DESCRIPTION: "Setze oder lese den aktuellen prefix in diesem Server.",
+    LOC_PREFIX_DESCRIPTION: "Setze oder lese den aktuellen prefix auf diesem Server.",
     LOC_PREFIX_USAGES: """
     **Anwendungen**:
     - get `prefix`

@@ -5,19 +5,27 @@ defmodule Util.Locale.EN do
   def friendly_name(), do: "English (English)"
 
   @blacklist %{
-    LOC_BLACKLIST_DESCRIPTION: "Blacklist or unblacklist a user or guild.",
+    LOC_BLACKLIST_DESCRIPTION: "Blacklist or unblacklist a user.",
     LOC_BLACKLIST_USAGES: """
     **Usages**:
     - `blacklist` (get all)
-    - `blacklist [UserID|GuildID]` (blacklist)
-    - `blacklist remove [UserID|GuilID]` (unblacklist)
+    - `blacklist [UserID]` (blacklist)
+    - `blacklist remove [UserID]` (unblacklist)
     """,
     LOC_BLACKLIST_EXAMPLES: """
     **Examples**:
     - `blacklist` (get all)
     - `blacklist 218348062828003328` (blacklist)
     - `blacklist remove 218348062828003328` (unblacklist)
-    """
+    """,
+    LOC_BLACKLIST_NO_USER: "Could not found a user with ``{{user}}``.",
+    LOC_BLACKLIST_BOT: "Not neeed, I already ignore all bots.",
+    LOC_BLACKLIST_SELF: "I don't think you want to blacklist yourself.",
+    LOC_BLACKLIST_PRIVILIGED: "You may not blacklist a priviliged user.",
+    LOC_BLACKLIST_BLACKLISTED: "Blacklisted {{user}} from using commands in this server.",
+    LOC_BLACKLIST_NOT_BLACKLISTED: "``{{user}}`` is not blacklisted.",
+    LOC_BLACKLIST_UNBLACKLISTED: "Unblacklisted {{user}} from using commands in this server.",
+    LOC_BLACKLIST_EMBED_TITLE: "In this guild blacklisted:"
   }
 
   @config %{

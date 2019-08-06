@@ -4,14 +4,14 @@ defmodule Worker.Command.Hidden.Blacklist do
   alias Util.Config.Global
 
   @impl true
-  def description(), do: :LOC_BLACKLIST_DESCRIPTION
+  def description(), do: "The global blacklist."
   @impl true
-  def usages(), do: :LOC_BLACKLIST_USAGES
+  def usages(), do: "Usage: `hiddenblacklist [remove] [UserID|GuildID]`"
   @impl true
-  def examples(), do: :LOC_BLACKLIST_EXAMPLES
+  def examples(), do: "Example: `hiddenblacklist`"
 
   @impl true
-  def triggers(), do: ["blacklist"]
+  def triggers(), do: ["globalblacklist"]
   @impl true
   def required(), do: [Worker.MiddleWare.OwnerOnly]
 
@@ -19,7 +19,7 @@ defmodule Worker.Command.Hidden.Blacklist do
   def call(%{args: []} = command, _) do
     res =
       Global.get_blacklisted()
-      |> Enum.join("\n")
+      |> Enum.join(", ")
       |> case do
         "" ->
           "Nobody and nothing blacklisted \\o/"
@@ -52,10 +52,10 @@ defmodule Worker.Command.Hidden.Blacklist do
   def call(%{args: ["remove", id]} = command, _) do
     res =
       case Global.blacklist(id, false) do
-        num when num > 0 ->
+        1 ->
           "Removed `#{id}` successfully from the blacklist."
 
-        num when num <= 0 ->
+        0 ->
           "`#{id}` was not blacklisted."
 
         :error ->
