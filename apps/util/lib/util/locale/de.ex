@@ -31,7 +31,8 @@ defmodule Util.Locale.DE do
     LOC_BLACKLIST_UNBLACKLISTED: """
     ``{{user}}`` befindet sich nicht länger auf der Blacklist und kann nun wieder Befehle auf diesem Server verwenden.
     """,
-    LOC_BLACKLIST_EMBED_TITLE: "Auf diesem Server gesperrt:"
+    LOC_BLACKLIST_EMBED_TITLE: "Auf diesem Server gesperrt:",
+    LOC_BLACKLIST_NOBODY_BLACKLISTED: "Niemand"
   }
 
   @config %{

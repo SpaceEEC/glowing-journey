@@ -149,7 +149,7 @@ defmodule Rpc.LavaLink do
 
   defp send_command(guild_id, command) do
     ensure_loaded(LavaLink.Player).name()
-    |> ensure_loaded(ExLink.Player).get_player(guild_id)
+    |> ensure_loaded(ExLink).get_player(guild_id)
     |> case do
       :error ->
         :error

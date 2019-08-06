@@ -25,7 +25,8 @@ defmodule Util.Locale.EN do
     LOC_BLACKLIST_BLACKLISTED: "Blacklisted {{user}} from using commands in this server.",
     LOC_BLACKLIST_NOT_BLACKLISTED: "``{{user}}`` is not blacklisted.",
     LOC_BLACKLIST_UNBLACKLISTED: "Unblacklisted {{user}} from using commands in this server.",
-    LOC_BLACKLIST_EMBED_TITLE: "In this guild blacklisted:"
+    LOC_BLACKLIST_EMBED_TITLE: "In this guild blacklisted:",
+    LOC_BLACKLIST_NOBODY_BLACKLISTED: "Nobody"
   }
 
   @config %{
