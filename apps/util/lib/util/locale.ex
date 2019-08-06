@@ -39,6 +39,11 @@ defmodule Util.Locale do
   """
   @callback get_string(atom()) :: String.t()
 
+  @doc """
+    Returns the internal localization map.
+  """
+  @callback get_localization() :: %{atom() => String.t()}
+
   ### End behavior
 
   @doc """

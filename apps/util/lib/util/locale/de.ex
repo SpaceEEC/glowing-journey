@@ -489,6 +489,10 @@ defmodule Util.Locale.DE do
                 |> Map.merge(@voicelog, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@volume, &Util.Locale.raise_duplicate_key/3)
 
+  def get_localization() do
+    @localization
+  end
+
   @spec get_string(atom()) :: String.t() | no_return()
   def get_string(key) do
     Map.get_lazy(@localization, key, fn ->

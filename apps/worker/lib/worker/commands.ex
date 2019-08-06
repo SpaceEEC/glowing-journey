@@ -65,8 +65,8 @@ defmodule Worker.Commands do
   def get_default_prefix(), do: @default_prefix
 
   @mention_prefixes [
-    "<@#{Application.fetch_env!(:worker, :user_id)}>",
-    "<@!#{Application.fetch_env!(:worker, :user_id)}>"
+    #"<@#{Application.fetch_env!(:worker, :user_id)}>",
+    #"<@!#{Application.fetch_env!(:worker, :user_id)}>"
   ]
 
   def get_owners(), do: Application.fetch_env!(:worker, :owners)
