@@ -57,7 +57,9 @@ defmodule Worker.Command.Music.Play do
           [content: :LOC_PLAY_NOTHING_FOUND]
 
         track_or_tracks ->
-          Rpc.Gateway.voice_state_update(shard_id, guild_id, voice_states[author.id].channel_id)
+          unless Map.get(voice_states, Worker.Commands.get_user_id(), %{channel_id: nil}).channel_id do
+            Rpc.Gateway.voice_state_update(shard_id, guild_id, voice_states[author.id].channel_id)
+          end
 
           LavaLink.register(guild_id, channel_id, shard_id)
 
