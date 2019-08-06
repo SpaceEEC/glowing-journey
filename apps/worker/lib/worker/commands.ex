@@ -64,10 +64,14 @@ defmodule Worker.Commands do
   @default_prefix Application.fetch_env!(:worker, :default_prefix)
   def get_default_prefix(), do: @default_prefix
 
-  @mention_prefixes [
-    #"<@#{Application.fetch_env!(:worker, :user_id)}>",
-    #"<@!#{Application.fetch_env!(:worker, :user_id)}>"
-  ]
+  if Mix.env() == :prod do
+    @mention_prefixes [
+      "<@#{Application.fetch_env!(:worker, :user_id)}>",
+      "<@!#{Application.fetch_env!(:worker, :user_id)}>"
+    ]
+  else
+    @mention_prefixes []
+  end
 
   def get_owners(), do: Application.fetch_env!(:worker, :owners)
 
