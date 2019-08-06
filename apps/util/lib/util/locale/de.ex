@@ -291,7 +291,7 @@ defmodule Util.Locale.DE do
   }
 
   @prefix %{
-    LOC_PREFIX_DESCRIPTION: "Setze oder lese den aktuellen prefix auf diesem Server.",
+    LOC_PREFIX_DESCRIPTION: "Setze oder lese den aktuellen Prefix auf diesem Server.",
     LOC_PREFIX_USAGES: """
     **Anwendungen**:
     - get `prefix`

@@ -143,7 +143,7 @@ defmodule Worker.Command.Config do
 
   defp transform_value(command, internal_key, value)
        when internal_key in @channel_keys do
-    case Resolver.Channel.resolve(value, 0, Cache.fetch!(Guild, command.message.guild_id)) do
+    case Resolver.Channel.resolve(value, 0, Cache.fetch!(:"Elixir.Guild", command.message.guild_id)) do
       nil ->
         {:error, :LOC_CONFIG_NO_CHANNEL}
 
@@ -154,7 +154,7 @@ defmodule Worker.Command.Config do
 
   defp transform_value(command, internal_key, value)
        when internal_key in @role_keys do
-    case Resolver.Role.resolve(value, false, Cache.fetch!(Guild, command.message.guild_id)) do
+    case Resolver.Role.resolve(value, false, Cache.fetch!(:"Elixir.Guild", command.message.guild_id)) do
       nil ->
         {:error, :LOC_CONFIG_NO_CHANNEL}
 
