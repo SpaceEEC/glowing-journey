@@ -9,13 +9,15 @@ defmodule Util.Locale.DE do
     LOC_BLACKLIST_USAGES: """
     **Anwendungen**:
     - `blacklist`
-    - `blacklist [UserID]`
-    - `blacklist remove [UserID]`
+    - `blacklist [User]`
+    - `blacklist add [User]`
+    - `blacklist remove [User]`
     """,
     LOC_BLACKLIST_EXAMPLES: """
     **Beispiele**:
     - `blacklist`
     - `blacklist 218348062828003328`
+    - `blacklist add 218348062828003328`
     - `blacklist remove 218348062828003328`
     """,
     LOC_BLACKLIST_NO_USER: "Ich konnte keinen Nutzer mithilfe von ``{{user}}`` finden.",

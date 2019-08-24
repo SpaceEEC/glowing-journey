@@ -9,13 +9,15 @@ defmodule Util.Locale.EN do
     LOC_BLACKLIST_USAGES: """
     **Usages**:
     - `blacklist` (get all)
-    - `blacklist [UserID]` (blacklist)
-    - `blacklist remove [UserID]` (unblacklist)
+    - `blacklist [User]` (blacklist)
+    - `blacklist add [User]` (blacklist)
+    - `blacklist remove [User]` (unblacklist)
     """,
     LOC_BLACKLIST_EXAMPLES: """
     **Examples**:
     - `blacklist` (get all)
     - `blacklist 218348062828003328` (blacklist)
+    - `blacklist add 218348062828003328` (blacklist)
     - `blacklist remove 218348062828003328` (unblacklist)
     """,
     LOC_BLACKLIST_NO_USER: "Could not found a user with ``{{user}}``.",

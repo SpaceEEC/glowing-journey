@@ -56,17 +56,22 @@ defmodule Worker.Command.Config.Blacklist do
 
   def call(
         %{
-          args: [maybe_remove, maybe_user | _],
+          args: [maybe_add_or_remove, maybe_user | _],
           assigns: %{guild: guild},
           message: %{author: author}
         } = command,
         _
       ) do
     content =
-      if String.downcase(maybe_remove) == "remove" do
-        blacklist(maybe_user, guild, false, author.id)
-      else
-        blacklist(maybe_remove, guild, true, author.id)
+      case String.downcase(maybe_add_or_remove) do
+        "remove" ->
+          blacklist(maybe_user, guild, false, author.id)
+
+        "add" ->
+          blacklist(maybe_user, guild, true, author.id)
+
+        _other ->
+          blacklist(maybe_add_or_remove, guild, true, author.id)
       end
 
     set_response(command, content: content)
