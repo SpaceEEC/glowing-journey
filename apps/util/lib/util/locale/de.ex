@@ -89,7 +89,7 @@ defmodule Util.Locale.DE do
     ```asciidoc
     {{config}}
     ```
-    Zum Ändern dieser muss der ``config`` Befehl verwendet werden.
+    Zum Ändern dieser Werte muss der ``config`` Befehl verwendet werden.
     """
   }
 
