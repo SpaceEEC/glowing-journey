@@ -82,7 +82,7 @@ defmodule Worker.Command.Config do
     content =
       cond do
         value ->
-          {:LOC_CONFIG_VALUE, key: key, value: value}
+          {:LOC_CONFIG_VALUE, key: key, value: to_string(value)}
 
         key == "prefix" ->
           {:LOC_CONFIG_VALUE, key: key, value: Worker.Commands.get_default_prefix()}
