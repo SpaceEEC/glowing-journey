@@ -35,7 +35,7 @@ defmodule LavaLink.Rest do
 
       {:ok, %{body: body}} ->
         body
-        |> Poison.decode()
+        |> Jason.decode()
         |> handle_response(requester)
     end
   end

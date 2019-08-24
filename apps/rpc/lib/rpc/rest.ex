@@ -4,19 +4,19 @@ defmodule Rpc.Rest do
 
   use Crux.Rest
 
-  def request(_name, request) when is_local() do
-    super(Rest, request)
+  def request(request) when is_local() do
+    Rest.request(request)
   end
 
-  def request(name, request) do
+  def request(request) do
     do_rpc()
   end
 
-  def request!(_name, request) when is_local() do
-    super(Rest, request)
+  def request!(request) when is_local() do
+    Rest.request!(request)
   end
 
-  def request!(name, request) do
+  def request!(request) do
     do_rpc()
   end
 end

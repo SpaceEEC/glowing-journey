@@ -62,7 +62,7 @@ defmodule Worker.Resolver.Member do
           Crux.Rest.Functions.get_user(user_id)
           |> Map.put(:transform, nil)
 
-        user = Rest.request!(:"Elixir.Rest", request)
+        user = Rest.request!(request)
 
         Cache.insert(User, user)
         |> Crux.Structs.User.create()
@@ -72,7 +72,7 @@ defmodule Worker.Resolver.Member do
   def fetch_member(guild_id, user_id) do
     request = Crux.Rest.Functions.get_guild_member(guild_id, user_id)
 
-    case Rest.request(:Rest, request) do
+    case Rest.request(request) do
       {:ok, %{"user" => user} = member} ->
         member = Map.put(member, "guild_id", guild_id)
 

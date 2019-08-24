@@ -26,7 +26,7 @@ defmodule Rpc.MixProject do
   defp deps do
     [
       {:sentry, github: "SpaceEEC/sentry-elixir", branch: "fix/umbrella"},
-      {:poison, ">= 0.0.0"}
+      {:jason, ">= 0.0.0"}
     ]
   end
 end

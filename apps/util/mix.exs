@@ -25,8 +25,8 @@ defmodule Util.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:httpoison, "~> 1.1.1"},
-      {:poison, ">= 0.0.0"}
+      {:httpoison, "~> 1.5"},
+      {:jason, ">= 0.0.0"}
     ]
   end
 end
