@@ -46,7 +46,7 @@ config :lavalink,
 
 config :util,
   etcd_base_url: etcd_base_url,
-  default_locale: String.to_atom("Util.Locale." <> default_locale)
+  default_locale: String.to_atom("Elixir.Util.Locale." <> default_locale)
 
 config :worker,
   default_prefix: default_prefix,
