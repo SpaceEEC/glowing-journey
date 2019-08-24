@@ -20,13 +20,13 @@ defmodule Worker.MiddleWare.DJ do
 
   @impl true
   def call(command, predicate) when is_function(predicate, 1) do
-    # if predicate.(command) do
-    #   Logger.debug(fn -> "Predicate evaluated to true; bypasses." end)
+    if predicate.(command) do
+      Logger.debug(fn -> "Predicate evaluated to true; bypasses." end)
 
-    #   command
-    # else
-    call(command, [])
-    # end
+      command
+    else
+      call(command, [])
+    end
   end
 
   def call(

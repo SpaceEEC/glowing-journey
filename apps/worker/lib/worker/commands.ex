@@ -61,16 +61,19 @@ defmodule Worker.Commands do
 
   def get_user_id(), do: Application.fetch_env!(:worker, :user_id)
 
-  @default_prefix Application.fetch_env!(:worker, :default_prefix)
-  def get_default_prefix(), do: @default_prefix
+  def get_default_prefix(), do: Application.fetch_env!(:worker, :default_prefix)
 
   if Mix.env() == :prod do
-    @mention_prefixes [
-      "<@#{Application.fetch_env!(:worker, :user_id)}>",
-      "<@!#{Application.fetch_env!(:worker, :user_id)}>"
-    ]
+    defp mention_prefixes() do
+      [
+        "<@#{Application.fetch_env!(:worker, :user_id)}>",
+        "<@!#{Application.fetch_env!(:worker, :user_id)}>"
+      ]
+    end
   else
-    @mention_prefixes []
+    defp mention_prefixes() do
+      []
+    end
   end
 
   def get_owners(), do: Application.fetch_env!(:worker, :owners)
@@ -123,12 +126,12 @@ defmodule Worker.Commands do
     send_response(result, message)
   end
 
-  defp get_prefixes(%{guild_id: nil}), do: [@default_prefix | @mention_prefixes] ++ [""]
+  defp get_prefixes(%{guild_id: nil}), do: [get_default_prefix() | mention_prefixes()] ++ [""]
 
   defp get_prefixes(message) do
-    guild_prefix = Guild.get_prefix(message.guild_id, @default_prefix)
+    guild_prefix = Guild.get_prefix(message.guild_id, get_default_prefix())
 
-    [guild_prefix | @mention_prefixes]
+    [guild_prefix | mention_prefixes()]
   end
 
   defp get_command(%{content: content} = message, prefixes, shard_id) do

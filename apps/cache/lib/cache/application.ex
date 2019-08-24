@@ -2,11 +2,12 @@ defmodule Cache.Application do
   @moduledoc false
 
   use Application
+  require Rpc
 
   def start(_type, _args) do
     Rpc.Sentry.install()
 
-    if Rpc.local?(), do: Application.ensure_started(:gateway)
+    if Rpc.is_offline(), do: Application.ensure_started(:gateway)
 
     base_opts = {
       # TODO: Make this work cross node

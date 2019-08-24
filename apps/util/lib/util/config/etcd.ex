@@ -7,7 +7,9 @@ defmodule Util.Config.Etcd do
 
   alias Util.Rest
 
-  @base_url Application.fetch_env!(:util, :etcd_base_url)
+  defp base_url() do
+    Application.fetch_env!(:util, :etcd_base_url)
+  end
 
   @doc """
     Gets a value via key.
@@ -94,7 +96,7 @@ defmodule Util.Config.Etcd do
   defp request(route, data) do
     data = Map.new(data, fn {k, v} -> {k, Base.encode64(v)} end)
 
-    Rest.post(@base_url <> route, data)
+    Rest.post(base_url() <> route, data)
     |> case do
       {:ok, %{body: body}} ->
         {:ok, body}

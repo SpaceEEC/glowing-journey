@@ -35,6 +35,7 @@ defmodule Worker.MiddleWare.HasPermissions do
   def call(command, {permissions, channel_id, target, predicate}) do
     if predicate.(command) do
       Logger.debug(fn -> "Predicate evaluated to true; bypasses." end)
+
       command
     else
       call(command, {permissions, channel_id, target})

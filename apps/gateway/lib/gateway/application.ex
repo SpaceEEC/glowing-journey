@@ -2,6 +2,7 @@ defmodule Gateway.Application do
   @moduledoc false
 
   use Application
+  require Rpc
 
   @name Gateway
   def name(), do: @name
@@ -9,7 +10,7 @@ defmodule Gateway.Application do
   def start(_type, _args) do
     Rpc.Sentry.install()
 
-    if Rpc.local?(), do: Application.ensure_started(:rest)
+    if Rpc.is_offline(), do: Application.ensure_started(:rest)
 
     %{"shards" => shard_count, "url" => url} = Rpc.Rest.gateway_bot!()
 

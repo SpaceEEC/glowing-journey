@@ -12,127 +12,85 @@ defmodule Worker.MiddleWare.Connected do
 
   # if bot is connected it must be in the same channel, except on summon, there it's the opposite
 
-  @bot_id Worker.Commands.get_user_id()
-
   @impl true
   def required(), do: [Worker.MiddleWare.FetchGuild]
 
-  defmacrop is_connected(user_id, states) do
-    quote do
-      :erlang.is_map_key(unquote(user_id), unquote(states)) and
-        not is_nil(
-          :erlang.map_get(:channel_id, :erlang.map_get(unquote(user_id), unquote(states)))
-        )
+  def get_channel_id(user_id, states) do
+    case states do
+      %{^user_id => %{channel_id: channel_id}} -> channel_id
+      _ -> nil
     end
   end
 
-  defmacrop get_channel_id(user_id, states) do
-    quote do
-      :erlang.map_get(:channel_id, :erlang.map_get(unquote(user_id), unquote(states)))
-    end
+  def connected?(user_id, states) do
+    get_channel_id(user_id, states) != nil
   end
 
   @impl true
   def call(
         %Crux.Extensions.Command{
+          message: %{author: %{id: user_id}},
           assigns: %{guild: %{voice_states: voice_states}}
         } = command,
         command_atom
-      )
-      when command_atom in [:now_playing, :save, :queue] do
-    if is_connected(@bot_id, voice_states) do
-      command
-    else
-      command
-      |> set_response(content: :LOC_CONNECTED_BOT_NOT_CONNECTED)
-      |> halt()
+      ) do
+    bot_id = Worker.Commands.get_user_id()
+
+    cond do
+      # Now playing, save, and queue only require the bot to be connected
+      command_atom in [:now_playing, :save, :queue] ->
+        if connected?(bot_id, voice_states) do
+          command
+        else
+          command
+          |> set_response(content: :LOC_CONNECTED_BOT_NOT_CONNECTED)
+          |> halt()
+        end
+
+      # All other commands require the user to be connected
+      not connected?(user_id, voice_states) ->
+        command
+        |> set_response(content: :LOC_CONNECTED_USER_NOT_CONNECTED)
+        |> halt()
+
+      # In case of summon the bot must be connected and in a different channel
+      command_atom == :summon ->
+        cond do
+          # Not connected
+          not connected?(bot_id, voice_states) ->
+            command
+            |> set_response(content: :LOC_CONNECTED_SUMMON_NOT_CONNECTED)
+            |> halt()
+
+          # Same channel
+          get_channel_id(user_id, voice_states) == get_channel_id(bot_id, voice_states) ->
+            command
+            |> set_response(content: :LOC_CONNECTED_SUMMON_SAME_CHANNEL)
+            |> halt()
+
+          true ->
+            command
+        end
+
+      # The bot does not have to be connected in order to `play`
+      command_atom == :play and not connected?(bot_id, voice_states) ->
+        command
+
+      # For all other commands, both must be in the same channel
+      get_channel_id(user_id, voice_states) == get_channel_id(bot_id, voice_states) ->
+        command
+
+      # Bot is not connected
+      not connected?(bot_id, voice_states) ->
+        command
+        |> set_response(content: :LOC_CONNECTED_BOT_NOT_CONNECTED)
+        |> halt()
+
+      # User is not connected
+      true ->
+        command
+        |> set_response(content: :LOC_CONNECTED_DIFFERENT_CHANNELS)
+        |> halt()
     end
-  end
-
-  def call(
-        %Crux.Extensions.Command{
-          message: %{author: %{id: user_id}},
-          assigns: %{guild: %{voice_states: voice_states}}
-        } = command,
-        _command_atom
-      )
-      when not is_connected(user_id, voice_states) do
-    command
-    |> set_response(content: :LOC_CONNECTED_USER_NOT_CONNECTED)
-    |> halt()
-  end
-
-  ### summon exceptions
-  def call(
-        %Crux.Extensions.Command{
-          assigns: %{guild: %{voice_states: voice_states}}
-        } = command,
-        :summon
-      )
-      when not is_connected(@bot_id, voice_states) do
-    command
-    |> set_response(content: :LOC_CONNECTED_SUMMON_NOT_CONNECTED)
-    |> halt()
-  end
-
-  def call(
-        %Crux.Extensions.Command{
-          message: %{author: %{id: user_id}},
-          assigns: %{guild: %{voice_states: voice_states}}
-        } = command,
-        :summon
-      )
-      when get_channel_id(user_id, voice_states) != get_channel_id(@bot_id, voice_states) do
-    command
-  end
-
-  # only possible option now: same channel
-  def call(command, :summon) do
-    command
-    |> set_response(content: :LOC_CONNECTED_SUMMON_SAME_CHANNEL)
-    |> halt()
-  end
-
-  ### summon exceptions end
-
-  ### play exception
-  def call(
-        %Crux.Extensions.Command{
-          assigns: %{guild: %{voice_states: voice_states}}
-        } = command,
-        :play
-      )
-      when not is_connected(@bot_id, voice_states) do
-    command
-  end
-
-  # if the bot is in the same channel it always works
-  def call(
-        %Crux.Extensions.Command{
-          message: %{author: %{id: user_id}},
-          assigns: %{guild: %{voice_states: voice_states}}
-        } = command,
-        _
-      )
-      when get_channel_id(user_id, voice_states) == get_channel_id(@bot_id, voice_states) do
-    command
-  end
-
-  def call(
-        %Crux.Extensions.Command{
-          assigns: %{guild: %{voice_states: voice_states}}
-        } = command,
-        _command_atom
-      )
-      when not is_connected(@bot_id, voice_states) do
-    command
-    |> set_response(content: :LOC_CONNECTED_BOT_NOT_CONNECTED)
-    |> halt()
-  end
-
-  def call(command, _command_atom) do
-    command
-    |> set_response(content: :LOC_CONNECTED_DIFFERENT_CHANNELS)
-    |> halt()
   end
 end

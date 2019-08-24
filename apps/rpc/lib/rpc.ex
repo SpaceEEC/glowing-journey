@@ -7,6 +7,7 @@ defmodule Rpc do
   @lavalink :"lavalink@127.0.0.1"
   @worker :"worker@127.0.0.1"
   @no_node :nonode@nohost
+  @single_node :"offline@127.0.0.1"
 
   def cache(), do: @cache
   def gateway(), do: @gateway
@@ -20,16 +21,18 @@ defmodule Rpc do
   def lavalink_alive?(), do: Node.ping(@lavalink) == :pong
   def worker_alive?(), do: Node.ping(@worker) == :pong
 
-  def local?(), do: node() == @no_node
+  defguard is_offline() when node() in [@no_node, @single_node]
 
   defmacro __using__(type) when type in [:cache, :gateway, :rest, :lavalink, :worker] do
     quote location: :keep do
+      require Rpc
+
       @local_node String.to_atom(Atom.to_string(unquote(type)) <> "@127.0.0.1")
 
       @doc """
         Whether the invoking node is the local node in the contex of the module.
       """
-      defguard is_local() when node() in [unquote(@no_node), @local_node]
+      defguard is_local() when Rpc.is_offline() or node() == @local_node
 
       @doc """
         Invokes this function with the given args in the correct node.

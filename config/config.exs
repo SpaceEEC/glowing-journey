@@ -6,17 +6,9 @@ config :logger, :console,
   format: {Rpc.Logger, :format},
   metadata: [:module, :function]
 
-import_config "./config.secret.exs"
-
-config :lavalink, :lavalink_authority, "localhost:2333"
-
-config :util,
-  etcd_base_url: "http://localhost:2379/v3beta/kv",
-  default_locale: Util.Locale.EN
-
-config :worker,
-  default_prefix: "ß",
-  owners: [218_348_062_828_003_328]
+unless Mix.env() == :prod do
+  import_config "./config.secret.exs"
+end
 
 config :sentry,
   environment_name: Mix.env(),

@@ -10,6 +10,9 @@ defmodule Worker.MiddleWare.GuildOnly do
 
   def call(command, predicate) when is_function(predicate, 1) do
     if predicate.(command) do
+      require Logger
+      Logger.debug(fn -> "Predicate evaluated to true; bypasses." end)
+
       command
     else
       call(command, [])

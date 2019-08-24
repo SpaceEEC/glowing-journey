@@ -3,9 +3,14 @@ defmodule LavaLink.Rest do
 
   require Logger
 
-  @url "http://" <> Application.fetch_env!(:lavalink, :lavalink_authority) <> "/loadtracks"
+  defp url() do
+    "http://" <> Application.fetch_env!(:lavalink, :lavalink_authority) <> "/loadtracks"
+  end
 
-  @authorization Application.fetch_env!(:lavalink, :lavalink_authorization)
+
+  defp authorization() do
+    Application.fetch_env!(:lavalink, :lavalink_authorization)
+  end
 
   def resolve_identifier(url) do
     # Strip <> to avoid embeds in Discord
@@ -19,9 +24,9 @@ defmodule LavaLink.Rest do
   end
 
   def fetch_tracks(identifier, requester) do
-    @url
+    url()
     |> HTTPoison.get(
-      [{"Authorization", @authorization}],
+      [{"Authorization", authorization()}],
       params: [identifier: identifier]
     )
     |> case do

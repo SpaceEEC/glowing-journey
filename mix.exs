@@ -6,7 +6,23 @@ defmodule Bot.MixProject do
       apps_path: "apps",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      releases: releases(),
+      version: "0.0.1-dev"
+    ]
+  end
+
+  defp releases do
+    [
+      all_in_one: [
+        applications: [
+          rest: :permanent,
+          gateway: :permanent,
+          cache: :permanent,
+          worker: :permanent,
+          lavalink: :permanent
+        ]
+      ]
     ]
   end
 
@@ -23,6 +39,6 @@ defmodule Bot.MixProject do
   end
 
   defp aliases do
-    [sentry_recompile: ["compile", "deps.compile sentry --force"]]
+    [sentry_compile: ["compile", "deps.compile sentry --force"]]
   end
 end

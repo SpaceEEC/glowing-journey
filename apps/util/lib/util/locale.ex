@@ -10,7 +10,7 @@ defmodule Util.Locale do
     Util.Locale.EN
   ]
 
-  @default Application.fetch_env!(:util, :default_locale)
+  defp default(), do: Application.fetch_env!(:util, :default_locale)
 
   @typedoc """
     Module implementing the `Util.Locale` behavior.
@@ -69,13 +69,13 @@ defmodule Util.Locale do
   """
   @spec fetch!(Crux.Structs.Message.t() | Crux.Rest.snowflake()) :: locale()
   def fetch!(%{guild_id: guild_id}), do: fetch!(guild_id)
-  def fetch!(nil), do: @default
+  def fetch!(nil), do: default()
 
   def fetch!(guild_id) do
     Guild.get_locale(guild_id, nil)
     |> case do
       nil ->
-        @default
+        default()
 
       mod ->
         Module.safe_concat(Util.Locale, mod)
