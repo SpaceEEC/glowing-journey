@@ -15,6 +15,14 @@ defmodule Worker do
     Worker.Commands.handle(message, shard_id)
   end
 
+  def handle_event({:GUILD_MEMBER_ADD, member, _shard_id}) do
+    Worker.Handler.JoinLeaveMessage.handle_join(member)
+  end
+
+  def handle_event({:GUILD_MEMBER_REMOVE, member, _shard_id}) do
+    Worker.Handler.JoinLeaveMessage.handle_remove(member)
+  end
+
   def handle_event({:VOICE_SERVER_UPDATE, data, _shard_id}) do
     Rpc.LavaLink.forward(data)
   end
