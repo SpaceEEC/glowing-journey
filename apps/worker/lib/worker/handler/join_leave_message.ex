@@ -13,9 +13,9 @@ defmodule Worker.Handler.JoinLeaveMessage do
     )
   end
 
-  def handle_remove(member) do
+  def handle_remove(data) do
     handle(
-      member,
+      data,
       &Guild.get_leave_message/1,
       &Guild.get_leave_channel/1,
       &Guild.delete_leave_channel/1
@@ -23,13 +23,13 @@ defmodule Worker.Handler.JoinLeaveMessage do
   end
 
   defp handle(
-         %{guild_id: guild_id} = member,
+         %{guild_id: guild_id, user: user},
          get_message,
          get_channel,
          delete_channel
        ) do
     message = get_message(guild_id, get_message)
-    user = get_user(member.user)
+    user = get_user(user)
     channel = get_channel(guild_id, get_channel, delete_channel)
     guild = get_guild(guild_id)
 
@@ -42,7 +42,7 @@ defmodule Worker.Handler.JoinLeaveMessage do
       message =
         message
         |> String.replace(":member:", "`@#{user.username}##{user.discriminator}`")
-        |> String.replace(":mention:", to_string(member))
+        |> String.replace(":mention:", to_string(user))
         |> String.replace(":guild:", guild.name)
 
       permissions = Permissions.implicit(me_member, guild, channel)

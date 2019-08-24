@@ -19,8 +19,20 @@ defmodule Worker do
     Worker.Handler.JoinLeaveMessage.handle_join(member)
   end
 
-  def handle_event({:GUILD_MEMBER_REMOVE, member, _shard_id}) do
-    Worker.Handler.JoinLeaveMessage.handle_remove(member)
+  def handle_event({:GUILD_MEMBER_REMOVE, {data, %{id: guild_id}}, shard_id}) do
+    handle_event({:GUILD_MEMBER_REMOVE, {data, guild_id}, shard_id})
+  end
+
+  def handle_event({:GUILD_MEMBER_REMOVE, {%{user: user_id}, guild_id}, shard_id}) do
+    handle_event({:GUILD_MEMBER_REMOVE, {user_id, guild_id}, shard_id})
+  end
+
+  def handle_event({:GUILD_MEMBER_REMOVE, {%{id: user_id}, guild_id}, shard_id}) do
+    handle_event({:GUILD_MEMBER_REMOVE, {user_id, guild_id}, shard_id})
+  end
+
+  def handle_event({:GUILD_MEMBER_REMOVE, {user_id, guild_id}, _shard_id}) do
+    Worker.Handler.JoinLeaveMessage.handle_remove(%{user: user_id, guild_id: guild_id})
   end
 
   def handle_event({:VOICE_SERVER_UPDATE, data, _shard_id}) do
