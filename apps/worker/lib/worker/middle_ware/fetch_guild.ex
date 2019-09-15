@@ -9,7 +9,8 @@ defmodule Worker.MiddleWare.FetchGuild do
 
   use Worker.MiddleWare
 
-  require Logger
+  alias Rpc.Sentry
+  require Sentry
 
   # Already fetched, do nothing
   def call(%{assigns: %{guild: _}} = command, _opts) do
@@ -17,7 +18,7 @@ defmodule Worker.MiddleWare.FetchGuild do
   end
 
   def call(%{message: %{guild_id: nil}} = command, _opts) do
-    Logger.debug(fn -> "DM; assigning nil" end)
+    Sentry.debug("DM; assigning nil", "middleware")
 
     assign(command, :guild, nil)
   end
@@ -26,12 +27,12 @@ defmodule Worker.MiddleWare.FetchGuild do
     Cache.fetch(Guild, guild_id)
     |> case do
       {:ok, guild} ->
-        Logger.debug(fn -> "Successfully fetched guild #{guild_id}" end)
+        Sentry.debug("Successfully fetched guild #{guild_id}", "middleware")
 
         assign(command, :guild, guild)
 
       :error ->
-        Logger.warn(fn -> "Could not find a guild with the id #{guild_id} in the cache." end)
+        Sentry.warn("Could not find a guild with the id #{guild_id} in the cache.", "middleware")
 
         command
         |> set_response(content: Template.fetchguild_uncached())

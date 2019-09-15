@@ -19,7 +19,8 @@ defmodule Worker.MiddleWare.FetchMember do
 
   use Worker.MiddleWare
 
-  require Logger
+  alias Rpc.Sentry
+  require Sentry
 
   def required(), do: [Worker.MiddleWare.FetchGuild]
 
@@ -29,7 +30,7 @@ defmodule Worker.MiddleWare.FetchMember do
   # Not in a guild, assign `nil`
 
   def call(%{message: %{guild_id: nil}} = command, :self) do
-    Logger.debug(fn -> "DM; assigning nil." end)
+    Sentry.debug("DM; assigning nil.", "middleware")
 
     command
     |> assign(:member, nil)
@@ -57,11 +58,11 @@ defmodule Worker.MiddleWare.FetchMember do
   def call(%{message: message, assigns: %{guild: guild}} = command, target)
       when target in [:member, :self] do
     user = get_target(message, target)
-    Logger.debug(fn -> "Fetching #{target} #{user.id}..." end)
+    Sentry.debug("Fetching #{target} #{user.id}...", "middleware")
 
     with :error <- Map.fetch(guild.members, user.id),
          {:ok, member} <- Rest.get_guild_member(guild, user) do
-      Logger.debug(fn -> "Fetched #{user.id} via rest." end)
+      Sentry.debug("Fetched #{user.id} via rest.", "middleware")
 
       member = %{member | guild_id: guild.id}
       guild = %{guild | members: &Map.put(&1, user.id, member)}
@@ -73,21 +74,20 @@ defmodule Worker.MiddleWare.FetchMember do
     else
       # Map.fetch from guild.members
       {:ok, member} ->
-        Logger.debug(fn -> "Fetched #{user.id} from cache." end)
+        Sentry.debug("Fetched #{user.id} from cache.", "middleware")
 
         add_member(command, message, member)
 
       # Rest.get_guild_member failed
       {:error, error} ->
-        require Logger
-
-        Logger.error(fn ->
+        Sentry.error(
           """
           An error occured while fetching #{user} (#{user.id}) \
           in guild #{guild.name} (#{guild.id})
           #{inspect(error)}
-          """
-        end)
+          """,
+          "middleware"
+        )
 
         command
         |> set_response(content: Template.fetchmember_failed())

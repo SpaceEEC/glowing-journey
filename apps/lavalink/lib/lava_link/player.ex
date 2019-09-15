@@ -8,7 +8,7 @@ defmodule LavaLink.Player do
   alias Util.Locale
   alias Util.Locale.Template
 
-  require Logger
+  require Rpc.Sentry
 
   # General info
   defstruct client: nil,
@@ -49,9 +49,10 @@ defmodule LavaLink.Player do
       shard_id: 0
     }
 
-    Logger.debug(fn ->
-      "[---------------------------------------] INIT #{inspect(self())} [---------------------------------------]"
-    end)
+    Rpc.Sentry.debug(
+      "[---------------------------------------] INIT #{inspect(self())} [---------------------------------------]",
+      "player"
+    )
 
     {:ok, state}
   end
@@ -70,7 +71,7 @@ defmodule LavaLink.Player do
     reply =
       {:reply, _, %__MODULE__{queue: queue}} = apply(__MODULE__.Command, command, data ++ [state])
 
-    Logger.info(fn -> "#{command} -> #{:queue.len(queue)}" end)
+    Rpc.Sentry.info("#{command} -> #{:queue.len(queue)}", "player")
 
     reply
   end
@@ -85,6 +86,7 @@ defmodule LavaLink.Player do
 
   # Global stats and stuff
   def handle_dispatch(data, nil) do
+    require Logger
     Logger.debug(fn -> "Stats: #{inspect(data)}" end)
   end
 
@@ -108,7 +110,7 @@ defmodule LavaLink.Player do
           paused: paused
         } = state
       ) do
-    Logger.debug(fn -> "playerUpdate #{inspect(event)}" end)
+    Rpc.Sentry.debug("playerUpdate #{inspect(event)}", "player")
 
     state =
       if paused do
@@ -133,13 +135,14 @@ defmodule LavaLink.Player do
         handle_dispatch(data, state)
 
       :empty ->
-        require Logger
+        IO.inspect(state)
 
-        Logger.error(fn ->
-          IO.inspect(state)
+        Rpc.Sentry.error(
+          "Received player update for guild #{guild_id} (#{shard_id}) but nothing is queued up! (Did the player crash?)",
+          "player"
+        )
 
-          "Received player update for guild #{guild_id} (#{shard_id}) but nothing is queued up! (Did the player crash?)"
-        end)
+        Sentry.capture_message("Empty player received player update.")
 
         Gateway.voice_state_update(shard_id, guild_id, nil)
 
@@ -158,7 +161,7 @@ defmodule LavaLink.Player do
         } = event,
         %__MODULE__{paused: false} = state
       ) do
-    Logger.debug(fn -> "playerUpdate #{inspect(event)}" end)
+    Rpc.Sentry.debug("playerUpdate #{inspect(event)}", "player")
 
     state = %__MODULE__{state | position: new_position}
 
@@ -179,9 +182,9 @@ defmodule LavaLink.Player do
         :empty -> nil
       end
 
-    Logger.debug(fn ->
-      base = "TrackEndEvent: (#{guild_id}) #{reason} "
+    base = "TrackEndEvent: (#{guild_id}) #{reason} "
 
+    message =
       if track do
         position = Track.format_milliseconds(track.position)
         length = Track.to_length(track)
@@ -189,7 +192,8 @@ defmodule LavaLink.Player do
       else
         base <> "no track data available"
       end
-    end)
+
+    Rpc.Sentry.debug(message, "player")
 
     extra_content = if track, do: [embed: Track.to_embed(track, :end)], else: []
     state = set_message(state, [{:content, "Ended `#{reason}`"} | extra_content])
@@ -228,24 +232,26 @@ defmodule LavaLink.Player do
         },
         state
       ) do
-    Logger.warn(fn ->
+    Rpc.Sentry.warn(
       """
       WebSocket closed:
       Code: #{code}
       Reason: #{reason}
       By remote: #{by_remote}
-      """
-    end)
+      """,
+      "player"
+    )
 
-    Logger.debug(fn ->
-      "[---------------------------------------] STOP #{inspect(self())} [---------------------------------------]"
-    end)
+    Rpc.Sentry.debug(
+      "[---------------------------------------] STOP #{inspect(self())} [---------------------------------------]",
+      "player"
+    )
 
     {:stop, :normal, state}
   end
 
   def handle_dispatch(data, state) do
-    Logger.debug(fn -> "Received: #{inspect(data)}" end)
+    Rpc.Sentry.debug("Received: #{inspect(data)}", "player")
 
     {:noreply, state}
   end
@@ -290,9 +296,12 @@ defmodule LavaLink.Player do
   end
 
   def set_message(%__MODULE__{channel_id: nil} = state, message) do
-    Logger.error(fn ->
-      "Tried to set message but no channel was registered: #{inspect(message)}"
-    end)
+    Rpc.Sentry.error(
+      "Tried to set message but no channel was registered: #{inspect(message)}",
+      "player"
+    )
+
+    Sentry.capture_message("Updating player message failed.")
 
     state
   end
@@ -302,13 +311,16 @@ defmodule LavaLink.Player do
     data = Locale.localize_response(data, locale)
 
     case Rest.create_message(channel_id, data) do
-      {:ok, message} ->
+      {:ok, %Crux.Structs.Message{} = message} ->
         %__MODULE__{state | message: message}
 
       {:error, error} ->
-        Logger.error(fn ->
-          "Setting a new message failed #{inspect(error)} #{inspect(data)}"
-        end)
+        Rpc.Sentry.error(
+          "Setting a new message failed #{inspect(error)} #{inspect(data)}",
+          "player"
+        )
+
+        Sentry.capture_message("Updating player message failed.")
 
         state
     end
@@ -319,24 +331,25 @@ defmodule LavaLink.Player do
     data = Locale.localize_response(data, locale)
 
     case Rest.edit_message(message, data) do
-      {:ok, message} ->
+      {:ok, %Crux.Structs.Message{} = message} ->
         %__MODULE__{state | message: message}
 
       {:error, error} ->
         case error do
           # Unknown message code    \/
           %Crux.Rest.ApiError{code: 10008} ->
-            Logger.warn(fn ->
-              "Message deleted, sending a new one..."
-            end)
+            Rpc.Sentry.warn("Message deleted, sending a new one...", "player")
 
             %__MODULE__{state | message: nil}
             |> set_message(data)
 
           _ ->
-            Logger.error(fn ->
-              "Setting an old message failed #{inspect(error)} #{inspect(data)}"
-            end)
+            Rpc.Sentry.error(
+              "Setting an old message failed #{inspect(error)} #{inspect(data)}",
+              "player"
+            )
+
+            Sentry.capture_message("Updating player message failed.")
 
             state
         end

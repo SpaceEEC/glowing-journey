@@ -512,10 +512,11 @@ defmodule Util.Locale.DE do
   @spec get_string(atom()) :: String.t() | no_return()
   def get_string(key) do
     Map.get_lazy(@localization, key, fn ->
-      require Logger
       message = "Fehlender oder nicht übersetzter Schlüssel: #{key}!"
 
-      Logger.error(fn -> message end)
+      require Rpc.Sentry
+      Rpc.Sentry.error(message, "locale")
+      Sentry.capture_message("Missing locale key.")
 
       "ERROR: " <> message
     end)

@@ -12,7 +12,7 @@ defmodule Util.Locale.EN do
     - `avatar 218348062828003328`
     - `avatar @space#0001`
     - `avatar space`
-    """,
+    """
   }
 
   @blacklist %{
@@ -505,10 +505,11 @@ defmodule Util.Locale.EN do
   @spec get_string(atom()) :: String.t() | no_return()
   def get_string(key) do
     Map.get_lazy(@localization, key, fn ->
-      require Logger
       message = "Missing locale key #{key}!"
 
-      Logger.error(fn -> message end)
+      require Rpc.Sentry
+      Rpc.Sentry.error(message, "locale")
+      Sentry.capture_message("Missing locale key.")
 
       "ERROR: " <> message
     end)

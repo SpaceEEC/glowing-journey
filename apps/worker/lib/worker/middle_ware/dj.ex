@@ -12,7 +12,8 @@ defmodule Worker.MiddleWare.DJ do
   alias Util.Config.Guild
   alias Util.Locale.Template
 
-  require Logger
+  alias Rpc.Sentry
+  require Rpc.Sentry
 
   @impl true
   def required() do
@@ -22,7 +23,7 @@ defmodule Worker.MiddleWare.DJ do
   @impl true
   def call(command, predicate) when is_function(predicate, 1) do
     if predicate.(command) do
-      Logger.debug(fn -> "Predicate evaluated to true; bypasses." end)
+      Sentry.debug("Predicate evaluated to true; bypasses.", "middleware")
 
       command
     else
@@ -70,7 +71,10 @@ defmodule Worker.MiddleWare.DJ do
     if MapSet.member?(channels, dj_channel_id) do
       dj_channel_id
     else
-      Logger.debug(fn -> "Configured dj channel in guild #{guild_id} deleted; Removing..." end)
+      Sentry.debug(
+        "Configured dj channel in guild #{guild_id} deleted; Removing...",
+        "middleware"
+      )
 
       # Channel does not exist, remove from config
       1 = Guild.delete_dj_channel(guild_id)
@@ -89,7 +93,7 @@ defmodule Worker.MiddleWare.DJ do
   # Roles does not exist, remove from config
   defp ensure_role(dj_role_id, %{id: guild_id})
        when is_integer(dj_role_id) do
-    Logger.debug(fn -> "Configured dj role in guild #{guild_id} deleted; Removing..." end)
+    Sentry.debug("Configured dj role in guild #{guild_id} deleted; Removing...", "middleware")
 
     1 = Guild.delete_dj_role(guild_id)
     nil

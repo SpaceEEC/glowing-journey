@@ -28,8 +28,9 @@ defmodule Worker.Command.Music.Save do
         nil
 
       {:error, error} ->
-        require Logger
-        Logger.warn(fn -> "Adding a reaction failed: #{inspect(error)}" end)
+        require Rpc.Sentry
+        Rpc.Sentry.warn("Adding a reaction failed: #{inspect(error)}", "command")
+        Sentry.capture_exception(error)
     end
 
     command

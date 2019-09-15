@@ -1,8 +1,6 @@
 defmodule LavaLink.Rest do
   alias LavaLink.Track
 
-  require Logger
-
   defp url() do
     "http://" <> Application.fetch_env!(:lavalink, :lavalink_authority) <> "/loadtracks"
   end
@@ -90,7 +88,10 @@ defmodule LavaLink.Rest do
          %{"loadType" => "LOAD_FAILED"} = response,
          _requester
        ) do
-    Logger.error(fn -> "Fetching failed #{inspect(response)}" end)
+    require Rpc.Sentry
+    Rpc.Sentry.error("Fetching failed #{inspect(response)}", "handler")
+
+    Sentry.capture_message("Fetching tracks failed.")
 
     []
   end

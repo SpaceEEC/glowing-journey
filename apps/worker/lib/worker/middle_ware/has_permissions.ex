@@ -15,19 +15,19 @@ defmodule Worker.MiddleWare.HasPermissions do
 
   use Worker.MiddleWare
 
-  require Logger
-
   alias Worker.MiddleWare.OwnerOnly
-  alias Rpc.Cache
+  alias Rpc.{Cache, Sentry}
   alias Util.Locale.Template
 
   alias Crux.Structs.Permissions
+
+  require Rpc.Sentry
 
   def required(), do: [Worker.MiddleWare.FetchGuild, {Worker.MiddleWare.FetchMember, :both}]
 
   # Do not require permissions in dms, there aren't any there anyway
   def call(%{message: %{guild_id: nil}} = command, _opts) do
-    Logger.debug(fn -> "DM; bypasses." end)
+    Sentry.debug("DM; bypasses.", "middleware")
 
     command
   end
@@ -35,7 +35,7 @@ defmodule Worker.MiddleWare.HasPermissions do
   # Only require permissions if a specific condition is met
   def call(command, {permissions, channel_id, target, predicate}) do
     if predicate.(command) do
-      Logger.debug(fn -> "Predicate evaluated to true; bypasses." end)
+      Sentry.debug("Predicate evaluated to true; bypasses.", "middleware")
 
       command
     else
@@ -55,15 +55,16 @@ defmodule Worker.MiddleWare.HasPermissions do
     member = if target == :self, do: assigns.member, else: message.member
 
     if OwnerOnly.owner?(member) do
-      Logger.debug(fn -> "Owner bypasses." end)
+      Sentry.debug("Owner bypasses.", "middleware")
 
       command
     else
       channel = get_channel(channel_id, message)
 
-      Logger.debug(fn ->
-        "Checking #{target} in #{channel_id || :guild} for #{inspect(permissions)}."
-      end)
+      Sentry.debug(
+        "Checking #{target} in #{channel_id || :guild} for #{inspect(permissions)}.",
+        "middleware"
+      )
 
       Permissions.implicit(member, guild, channel)
       |> Permissions.missing(permissions)

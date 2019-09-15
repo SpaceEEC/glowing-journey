@@ -4,6 +4,8 @@ defmodule Worker.Handler.JoinLeaveMessage do
 
   alias Crux.Structs.Permissions
 
+  require Rpc.Sentry
+
   def handle_join(member) do
     handle(
       member,
@@ -37,6 +39,13 @@ defmodule Worker.Handler.JoinLeaveMessage do
          {:ok, user} <- user,
          {:ok, channel} <- channel,
          {:ok, guild} <- guild do
+      Sentry.Context.set_user_context(%{
+        message_id: message.id,
+        user_id: user.id,
+        channel_id: channel.id,
+        guild_id: guild.id
+      })
+
       me_member = get_me_member(guild, Worker.Commands.get_user_id())
 
       message =
@@ -47,9 +56,11 @@ defmodule Worker.Handler.JoinLeaveMessage do
 
       permissions = Permissions.implicit(me_member, guild, channel)
 
-      if Permissions.has(permissions, [:view_channel, :send_messages]) do
-        require Logger
+      Sentry.Context.set_user_context(%{
+        permissions: permissions.bitfield
+      })
 
+      if Permissions.has(permissions, [:view_channel, :send_messages]) do
         case Rest.create_message(channel, content: message) do
           {:ok, _message} ->
             :ok
@@ -57,19 +68,25 @@ defmodule Worker.Handler.JoinLeaveMessage do
           {:error, %{code: 10003}} ->
             delete_channel.(guild_id)
 
-            Logger.info(fn ->
-              "Removing deleted channel #{channel.id} in guild #{guild_id} from the configuration."
-            end)
+            Rpc.Sentry.info(
+              "Removing deleted channel #{channel.id} in guild #{guild_id} from the configuration.",
+              "handler"
+            )
+
+            Sentry.capture_message("Removed deleted join_leave_channel from the configuration.")
 
             :error
 
           {:error, error} ->
-            Logger.error(fn ->
+            Rpc.Sentry.error(
               """
               Sending join / leave message to #{channel.id} in guild #{guild_id} failed.
               #{Exception.format(:error, error)}
-              """
-            end)
+              """,
+              "handler"
+            )
+
+            Sentry.capture_exception(error)
 
             :error
         end
@@ -91,12 +108,15 @@ defmodule Worker.Handler.JoinLeaveMessage do
          {:error, reason} <- Rest.get_user(user_id) do
       require Logger
 
-      Logger.error(fn ->
+      Rpc.Sentry.error(
         """
         Fetching the user #{user_id} failed
         #{Exception.format(:error, reason)}
-        """
-      end)
+        """,
+        "handler"
+      )
+
+      Sentry.capture_message("Fetching the user failed.")
 
       :error
     end
@@ -109,13 +129,14 @@ defmodule Worker.Handler.JoinLeaveMessage do
         :error
 
       channel_id ->
-        require Logger
-
         case Cache.fetch(Channel, channel_id) do
           {:ok, %{type: type}} when type != 0 ->
-            Logger.info(fn ->
-              "Removing non text channel #{channel_id} in guild #{guild_id} from the configuration."
-            end)
+            Rpc.Sentry.info(
+              "Removing non text channel #{channel_id} in guild #{guild_id} from the configuration.",
+              "handler"
+            )
+
+            Sentry.capture_message("Removed deleted join_leave_channel from the configuration.")
 
             delete_channel.(guild_id)
 
@@ -125,9 +146,12 @@ defmodule Worker.Handler.JoinLeaveMessage do
             tuple
 
           :error ->
-            Logger.info(fn ->
-              "Removing deleted channel #{channel_id} in guild #{guild_id} from the configuration."
-            end)
+            Rpc.Sentry.info(
+              "Removing deleted channel #{channel_id} in guild #{guild_id} from the configuration.",
+              "handler"
+            )
+
+            Sentry.capture_message("Removed deleted join_leave_channel from the configuration.")
 
             delete_channel.(guild_id)
 

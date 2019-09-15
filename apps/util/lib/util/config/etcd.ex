@@ -102,15 +102,20 @@ defmodule Util.Config.Etcd do
         {:ok, body}
 
       {:error, error} ->
-        require Logger
+        require Rpc.Sentry
 
-        Logger.error(fn ->
-          """
-          Route: #{route}
-          Data : #{inspect(data)}
-          Error: #{inspect(error)}
-          """
-        end)
+        Rpc.Sentry.error(
+          fn ->
+            """
+            Route: #{route}
+            Data : #{inspect(data)}
+            Error: #{inspect(error)}
+            """
+          end,
+          "etcd"
+        )
+
+        Sentry.capture_message("ETCD request failed.")
 
         {:error, error}
     end
