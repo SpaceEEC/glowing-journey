@@ -68,7 +68,7 @@ defmodule Worker.Resolver.Member do
       end
 
       user
-      |> Crux.Structs.create(User)
+      |> Crux.Structs.create(Crux.Structs.User)
     else
       :error ->
         nil
