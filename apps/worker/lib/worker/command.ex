@@ -5,6 +5,8 @@ defmodule Worker.Command do
       alias Worker.MiddleWare
       alias Rpc.{Cache, Rest}
 
+      alias Util.Locale.Template
+
       @behaviour unquote(__MODULE__)
     end
   end

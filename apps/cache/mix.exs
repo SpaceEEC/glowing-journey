@@ -27,7 +27,7 @@ defmodule Cache.MixProject do
   defp deps do
     [
       {:rpc, in_umbrella: true},
-      {:crux_cache, "~> 0.2.0"},
+      {:crux_cache, "~> 0.2"},
       {:crux_base, git: "https://github.com/spaceeec/crux_base"}
     ]
   end

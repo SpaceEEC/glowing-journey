@@ -4,11 +4,11 @@ defmodule Worker.Command.Music.Volume do
   alias Rpc.LavaLink
 
   @impl true
-  def description(), do: :LOC_VOLUME_DESCRIPTION
+  def description(), do: Template.volume_description()
   @impl true
-  def usages(), do: :LOC_VOLUME_USAGES
+  def usages(), do: Template.volume_usages()
   @impl true
-  def examples(), do: :LOC_VOLUME_EXAMPLES
+  def examples(), do: Template.volume_examples()
 
   @impl true
   def required(), do: [MiddleWare.GuildOnly, {MiddleWare.Connected, :volume}]
@@ -19,7 +19,7 @@ defmodule Worker.Command.Music.Volume do
   def call(%{args: [], message: %{guild_id: guild_id}} = command, _) do
     volume = LavaLink.volume(guild_id)
 
-    set_response(command, content: {:LOC_VOLUME_CURRENT, volume: to_string(volume)})
+    set_response(command, content: Template.volume_current(volume))
   end
 
   def call(%{args: [volume | _], message: %{guild_id: guild_id}} = command, _) do
@@ -29,13 +29,13 @@ defmodule Worker.Command.Music.Volume do
         when volume in 0..1000 ->
           :ok = LavaLink.volume(guild_id, volume)
 
-          :LOC_VOLUME_SET
+          Template.volume_set()
 
         {_volume, ""} ->
-          :LOC_VOLUME_OUT_OF_BOUNDS
+          Template.volume_out_of_bounds()
 
         _ ->
-          :LOC_VOLUME_NAN
+          Template.volume_nan()
       end
 
     set_response(command, content: content)

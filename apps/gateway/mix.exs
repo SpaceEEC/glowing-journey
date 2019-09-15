@@ -25,7 +25,7 @@ defmodule Gateway.MixProject do
   defp deps do
     [
       {:rpc, in_umbrella: true},
-      {:crux_gateway, "~> 0.2.0"}
+      {:crux_gateway, "~> 0.2"}
     ]
   end
 end

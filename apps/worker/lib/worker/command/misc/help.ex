@@ -4,11 +4,11 @@ defmodule Worker.Command.Misc.Help do
   alias Worker.Commands
 
   @impl true
-  def description(), do: :LOC_HELP_DESCRIPTION
+  def description(), do: Template.help_description()
   @impl true
-  def usages(), do: :LOC_HELP_USAGES
+  def usages(), do: Template.help_usages()
   @impl true
-  def examples(), do: :LOC_HELP_EXAMPLES
+  def examples(), do: Template.help_examples()
 
   @impl true
   def triggers(), do: ["help"]
@@ -20,13 +20,13 @@ defmodule Worker.Command.Misc.Help do
         entries =
           for command <- commands do
             [name | _aliases] = command.triggers()
-            {:LOC_HELP_OVERVIEW_ENTRY, name: name, description: command.description()}
+            Template.help_overview_entry(name, command.description())
           end
 
-        {:LOC_HELP_OVERVIEW_GROUP, group: group, entries: entries}
+        Template.help_overview_group(group, entries)
       end
 
-    content = {:LOC_HELP_OVERVIEW, groups: groups}
+    content = Template.help_overview(groups)
 
     set_response(command, content: content)
   end
@@ -40,11 +40,11 @@ defmodule Worker.Command.Misc.Help do
           name =
             case command.triggers() do
               [name] ->
-                {:LOC_HELP_NAME, name: name}
+                Template.help_name(name)
 
               [name | aliases] ->
                 aliases = Enum.join(aliases, "``, ``")
-                {:LOC_HELP_NAME_ALIASES, name: name, aliases: aliases}
+                Template.help_name_aliases(name, aliases)
             end
 
           description =
@@ -54,14 +54,15 @@ defmodule Worker.Command.Misc.Help do
               command.description()
             end
 
-          {:LOC_HELP_DETAILED,
-           name: name,
-           description: description,
-           usages: command.usages(),
-           examples: command.examples()}
+          Template.help_detailed(
+            name,
+            description,
+            command.usages(),
+            command.examples()
+          )
 
         _ ->
-          :LOC_HELP_UNKNOWN_COMMAND
+          Template.help_unknown_command()
       end
 
     set_response(command, content: response)

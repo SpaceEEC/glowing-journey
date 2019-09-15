@@ -15,13 +15,14 @@ defmodule Worker.Command.Config do
 
   @impl true
   def description(long_or_short \\ :short)
-  def description(:short), do: :LOC_CONFIG_DESCRIPTION
-  def description(:long), do: :LOC_CONFIG_DESCRIPTION_LONG
+  def description(:short), do: Template.config_description()
+  def description(:long), do: Template.config_description_long()
 
   @impl true
-  def usages(), do: :LOC_CONFIG_USAGES
+  def usages(), do: Template.config_usages()
+
   @impl true
-  def examples(), do: :LOC_CONFIG_EXAMPLES
+  def examples(), do: Template.config_examples()
 
   @impl true
   def triggers(), do: ["config", "conf"]
@@ -32,7 +33,7 @@ defmodule Worker.Command.Config do
 
   @impl true
   def call(%{args: []} = command, _) do
-    set_response(command, content: {:LOC_GENERIC_NO_ARGS, command: "config"})
+    set_response(command, content: Template.generic_no_args())
   end
 
   # allow reversed key and action commands, because that will happen and is easy to handle
@@ -43,12 +44,12 @@ defmodule Worker.Command.Config do
 
   def call(%{args: [not_action | _args]} = command, _)
       when not_action not in @actions do
-    set_response(command, content: {:LOC_CONFIG_INVALID_ACTION, action: not_action})
+    set_response(command, content: Template.config_invalid_action(not_action))
   end
 
   def call(%{args: [action, key | rest]} = command, _) do
     if String.downcase(key) not in @keys do
-      set_response(command, content: :LOC_CONFIG_INVALID_KEY)
+      set_response(command, content: Template.config_invalid_key(Enum.join(@keys, " ")))
     else
       fun = String.to_existing_atom(action)
 
@@ -56,8 +57,8 @@ defmodule Worker.Command.Config do
     end
   end
 
-  def set(command, _key, "") do
-    set_response(command, content: {:LOC_CONFIG_MISSING_VALUE, keys: Enum.join(@keys, " ")})
+  def set(command, key, "") do
+    set_response(command, content: Template.config_missing_value(key))
   end
 
   def set(%{message: %{guild_id: guild_id}} = command, key, value) do
@@ -68,7 +69,7 @@ defmodule Worker.Command.Config do
         fun = String.to_existing_atom("put_#{internal_key}")
         apply(Guild, fun, [guild_id, value])
 
-        set_response(command, content: {:LOC_CONFIG_PUT_VALUE, key: key})
+        set_response(command, content: Template.config_put_value(key))
 
       {:error, other} ->
         set_response(command, content: other)
@@ -82,10 +83,10 @@ defmodule Worker.Command.Config do
     content =
       cond do
         value ->
-          {:LOC_CONFIG_VALUE, key: key, value: to_string(value)}
+          Template.config_value(key, value)
 
         key == "prefix" ->
-          {:LOC_CONFIG_VALUE, key: key, value: Worker.Commands.get_default_prefix()}
+          Template.config_value(key, Worker.Commands.get_default_prefix())
 
         key == "locale" ->
           value =
@@ -95,10 +96,10 @@ defmodule Worker.Command.Config do
             |> List.last()
             |> to_string()
 
-          {:LOC_CONFIG_VALUE, key: key, value: value}
+          Template.config_value(key, value)
 
         true ->
-          {:LOC_CONFIG_NO_VALUE, key: key}
+          Template.config_no_value(key)
       end
 
     set_response(command, content: content)
@@ -109,9 +110,9 @@ defmodule Worker.Command.Config do
     deleted = apply(Guild, fun, [guild_id])
 
     if deleted > 0 do
-      set_response(command, content: {:LOC_CONFIG_DELETED, key: key})
+      set_response(command, content: Template.config_deleted(key))
     else
-      set_response(command, content: {:LOC_CONFIG_NO_VALUE, key: key})
+      set_response(command, content: Template.config_no_value(key))
     end
   end
 
@@ -126,7 +127,7 @@ defmodule Worker.Command.Config do
     if String.length(value) < limit do
       {:ok, value}
     else
-      {:error, {:LOC_CONFIG_PREFIX_LENGTH, limit: to_string(limit)}}
+      {:error, Template.config_prefix_length(limit)}
     end
   end
 
@@ -137,7 +138,7 @@ defmodule Worker.Command.Config do
       {:ok, String.upcase(value)}
     else
       names = Enum.map_join(names, "\n", fn {code, name} -> "#{code} - #{name}" end)
-      {:error, {:LOC_CONFIG_LOCALE_UNKNOWN, locales: names}}
+      {:error, Template.config_locale_unknown(names)}
     end
   end
 
@@ -149,7 +150,7 @@ defmodule Worker.Command.Config do
            Cache.fetch!(:"Elixir.Guild", command.message.guild_id)
          ) do
       nil ->
-        {:error, :LOC_CONFIG_NO_CHANNEL}
+        {:error, Template.config_no_channel()}
 
       channel ->
         {:ok, to_string(channel.id)}
@@ -164,7 +165,7 @@ defmodule Worker.Command.Config do
            Cache.fetch!(:"Elixir.Guild", command.message.guild_id)
          ) do
       nil ->
-        {:error, :LOC_CONFIG_NO_CHANNEL}
+        {:error, Template.config_no_channel()}
 
       role ->
         {:ok, to_string(role.id)}

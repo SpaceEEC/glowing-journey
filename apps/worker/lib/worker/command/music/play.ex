@@ -5,11 +5,11 @@ defmodule Worker.Command.Music.Play do
   alias Rpc.LavaLink.Track
 
   @impl true
-  def description(), do: :LOC_PLAY_DESCRIPTION
+  def description(), do: Template.play_description()
   @impl true
-  def usages(), do: :LOC_PLAY_USAGES
+  def usages(), do: Template.play_usages()
   @impl true
-  def examples(), do: :LOC_PLAY_EXAMPLES
+  def examples(), do: Template.play_examples()
 
   @impl true
   def triggers(), do: ["play"]
@@ -31,7 +31,7 @@ defmodule Worker.Command.Music.Play do
 
   @impl true
   def call(%{args: []} = command, _) do
-    set_response(command, content: :LOC_GENERIC_NO_ARGS)
+    set_response(command, content: Template.generic_no_args())
   end
 
   def call(
@@ -54,7 +54,7 @@ defmodule Worker.Command.Music.Play do
           raise inspect(error)
 
         [] ->
-          [content: :LOC_PLAY_NOTHING_FOUND]
+          [content: Template.play_nothing_found()]
 
         track_or_tracks ->
           unless Map.get(voice_states, Worker.Commands.get_user_id(), %{channel_id: nil}).channel_id do
@@ -65,7 +65,7 @@ defmodule Worker.Command.Music.Play do
 
           case LavaLink.play(guild_id, track_or_tracks) do
             {true, _} ->
-              [content: :LOC_PLAY_START]
+              [content: Template.play_start()]
 
             {false, tracks} ->
               # TODO: show that more than one got queued

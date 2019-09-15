@@ -4,11 +4,11 @@ defmodule Worker.Command.Music.Shuffle do
   alias Rpc.LavaLink
 
   @impl true
-  def description(), do: :LOC_SHUFFLE_DESCRIPTION
+  def description(), do: Template.shuffle_description()
   @impl true
-  def usages(), do: :LOC_SHUFFLE_USAGES
+  def usages(), do: Template.shuffle_usages()
   @impl true
-  def examples(), do: :LOC_SHUFFLE_EXAMPLES
+  def examples(), do: Template.shuffle_examples()
   @impl true
   def triggers(), do: ["shuffle"]
   @impl true
@@ -23,6 +23,6 @@ defmodule Worker.Command.Music.Shuffle do
   def call(%{message: %{guild_id: guild_id}} = command, _) do
     :ok = LavaLink.shuffle(guild_id)
 
-    set_response(command, content: :LOC_SHUFFLE_SHUFFLED)
+    set_response(command, content: Template.shuffle_shuffled())
   end
 end

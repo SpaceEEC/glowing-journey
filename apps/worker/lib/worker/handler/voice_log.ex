@@ -2,6 +2,7 @@ defmodule Worker.Handler.VoiceLog do
   alias Rpc.{Cache, Rest}
   alias Util.Config.Guild
   alias Util.Locale
+  alias Util.Locale.Template
   def handle(nil, state), do: handle(%{channel_id: nil}, state)
 
   def handle(
@@ -18,17 +19,21 @@ defmodule Worker.Handler.VoiceLog do
           Rest.get_user!(user_id)
       end
 
+    user = to_string(user)
+    new_channel = "<##{new_channel_id}>"
+    old_channel = "<##{old_channel_id}>"
+
     if channel_id = Guild.get_voice_log_channel(guild_id) do
-      {key, color} =
+      {description, color} =
         case {old_channel_id, new_channel_id} do
           {nil, _} ->
-            {:LOC_VOICELOG_JOINED, 0x7CFC00}
+            {Template.voicelog_joined(user, new_channel), 0x7CFC00}
 
           {_, nil} ->
-            {:LOC_VOICELOG_LEFT, 0xFF4500}
+            {Template.voicelog_left(user, old_channel), 0xFF4500}
 
           _ ->
-            {:LOC_VOICELOG_MOVED, 0x3498DB}
+            {Template.voicelog_moved(user, old_channel, new_channel), 0x3498DB}
         end
 
       embed = %{
@@ -37,11 +42,7 @@ defmodule Worker.Handler.VoiceLog do
           icon_url: Crux.Rest.CDN.user_avatar(user)
         },
         color: color,
-        description:
-          {key,
-           user: to_string(user),
-           new_channel: "<##{new_channel_id}>",
-           old_channel: "<##{old_channel_id}>"},
+        description: description,
         timestamp: DateTime.utc_now() |> DateTime.to_iso8601()
       }
 

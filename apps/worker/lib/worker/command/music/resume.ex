@@ -4,11 +4,11 @@ defmodule Worker.Command.Music.Resume do
   alias Rpc.LavaLink
 
   @impl true
-  def description(), do: :LOC_RESUME_DESCRIPTION
+  def description(), do: Template.resume_description()
   @impl true
-  def usages(), do: :LOC_RESUME_USAGES
+  def usages(), do: Template.resume_usages()
   @impl true
-  def examples(), do: :LOC_RESUME_EXAMPLES
+  def examples(), do: Template.resume_examples()
   @impl true
   def triggers(), do: ["resume"]
   @impl true
@@ -23,9 +23,9 @@ defmodule Worker.Command.Music.Resume do
   def call(%{message: %{guild_id: guild_id}} = command, _) do
     content =
       if LavaLink.resume(guild_id) do
-        :LOC_RESUME_RESUMED
+        Template.resume_resumed()
       else
-        :LOC_RESUME_ALREADY
+        Template.resume_already()
       end
 
     set_response(command, content: content)

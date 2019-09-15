@@ -7,7 +7,6 @@ defmodule LavaLink.Rest do
     "http://" <> Application.fetch_env!(:lavalink, :lavalink_authority) <> "/loadtracks"
   end
 
-
   defp authorization() do
     Application.fetch_env!(:lavalink, :lavalink_authorization)
   end

@@ -10,6 +10,7 @@ defmodule Worker.MiddleWare.DJ do
   use Worker.MiddleWare
 
   alias Util.Config.Guild
+  alias Util.Locale.Template
 
   require Logger
 
@@ -49,12 +50,12 @@ defmodule Worker.MiddleWare.DJ do
     cond do
       dj_channel_id && dj_channel_id != channel_id ->
         command
-        |> set_response(content: {:LOC_DJ_CHANNEL, channel: "<##{dj_channel_id}>"})
+        |> set_response(content: Template.dj_channel("<##{dj_channel_id}>"))
         |> halt()
 
       dj_role_id && not MapSet.member?(roles, dj_role_id) ->
         command
-        |> set_response(content: {:LOC_DJ_ROLE, role: "@#{guild.roles[dj_role_id].name}"})
+        |> set_response(content: Template.dj_role("@#{guild.roles[dj_role_id].name}"))
         |> halt()
 
       true ->

@@ -3,6 +3,8 @@ defmodule Worker.MiddleWare.OwnerOnly do
     Ensures that the author of the message is registered as an owner of the bot.
   """
 
+  alias Util.Locale.Template
+
   use Worker.MiddleWare
 
   # Command.t()
@@ -38,7 +40,7 @@ defmodule Worker.MiddleWare.OwnerOnly do
     else
       if reply do
         command
-        |> set_response(content: :LOC_OWNERONLY)
+        |> set_response(content: Template.owneronly())
       else
         command
       end

@@ -1,14 +1,15 @@
 defmodule Worker.Command.Misc.Ping do
   use Worker.Command
 
+  alias Crux.Structs.Snowflake
   alias Util.Locale
 
   @impl true
-  def description(), do: :LOC_PING_DESCRIPTION
+  def description(), do: Template.ping_description()
   @impl true
-  def usages(), do: :LOC_PING_USAGES
+  def usages(), do: Template.ping_usages()
   @impl true
-  def examples(), do: :LOC_PING_EXAMPLES
+  def examples(), do: Template.ping_examples()
 
   @impl true
   def triggers(), do: ["ping"]
@@ -17,28 +18,20 @@ defmodule Worker.Command.Misc.Ping do
   def call(%{message: message} = command, _) do
     locale = Locale.fetch!(message)
 
-    response = Locale.localize_response([content: :LOC_PING_PONG], locale)
+    response = Locale.localize_response([content: Template.ping_pong()], locale)
     ping_message = Rest.create_message!(message, response)
 
-    ping_time = to_timestamp(ping_message) - to_timestamp(message)
+    ping_time =
+      Snowflake.deconstruct(ping_message).timestamp - Snowflake.deconstruct(message).timestamp
 
     response =
       Locale.localize_response(
-        [content: {:LOC_PING_TIME, ping: to_string(ping_time)}],
+        [content: Template.ping_time(ping_time)],
         locale
       )
 
     Rest.edit_message!(ping_message, response)
 
     command
-  end
-
-  # TODO: remove if available elsewhere
-  defp to_timestamp(%{id: id}), do: to_timestamp(id)
-
-  defp to_timestamp(id) when is_integer(id) do
-    use Bitwise
-
-    id >>> 22
   end
 end

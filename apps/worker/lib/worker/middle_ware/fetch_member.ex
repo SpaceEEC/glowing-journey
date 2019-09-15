@@ -15,6 +15,8 @@ defmodule Worker.MiddleWare.FetchMember do
     * `:both` - Fetches both
   """
 
+  alias Util.Locale.Template
+
   use Worker.MiddleWare
 
   require Logger
@@ -88,7 +90,7 @@ defmodule Worker.MiddleWare.FetchMember do
         end)
 
         command
-        |> set_response(content: :LOC_FETCHMEMBER_FAILED)
+        |> set_response(content: Template.fetchmember_failed())
         |> halt()
     end
   end

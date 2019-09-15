@@ -29,7 +29,7 @@ defmodule Worker.MixProject do
       {:rpc, in_umbrella: true},
       {:util, in_umbrella: true},
       {:crux_extensions, github: "spaceeec/crux_extensions", branch: "feat/handler_options"},
-      {:simetric, "~> 0.2.0"}
+      {:simetric, "~> 0.2"}
     ]
   end
 end

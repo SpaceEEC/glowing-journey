@@ -6,6 +6,7 @@ defmodule LavaLink.Player do
   alias Rpc.{Rest, Gateway}
   alias LavaLink.Track
   alias Util.Locale
+  alias Util.Locale.Template
 
   require Logger
 
@@ -276,7 +277,7 @@ defmodule LavaLink.Player do
 
         embed =
           if loop do
-            Map.update!(embed, :description, &{:LOC_TRACK_LOOP, rest: &1})
+            Map.update!(embed, :description, &Template.track_loop/1)
           else
             embed
           end

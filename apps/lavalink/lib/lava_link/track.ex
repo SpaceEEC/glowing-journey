@@ -14,6 +14,7 @@ defmodule LavaLink.Track do
 
   alias Rpc.Cache
   alias Crux.Rest.CDN
+  alias Util.Locale.Template
 
   @type t :: %__MODULE__{}
 
@@ -80,14 +81,15 @@ defmodule LavaLink.Track do
   def to_info(track, type \\ nil)
 
   def to_info(%__MODULE__{} = track, :now_playing) do
-    {:LOC_TRACK_POSITION,
-     uri: to_markdown_uri(track),
-     position: format_milliseconds(track.position),
-     length: to_length(track)}
+    Template.track_position(
+      to_markdown_uri(track),
+      format_milliseconds(track.position),
+      to_length(track)
+    )
   end
 
   def to_info(%__MODULE__{} = track, _) do
-    {:LOC_TRACK_INFO, uri: to_markdown_uri(track), length: to_length(track)}
+    Template.track_info(to_markdown_uri(track), to_length(track))
   end
 
   defp type_data(nil, track), do: %{description: to_markdown_uri(track)}
@@ -96,9 +98,9 @@ defmodule LavaLink.Track do
     %{
       # aqua
       color: 0x7EB7E4,
-      description: {:LOC_TRACK_DESCRIPTION, prefix: "💾", info: to_info(track)},
+      description: Template.track_description("💾", to_info(track)),
       footer: %{
-        text: :LOC_TRACK_SAVE
+        text: Template.track_save()
       }
     }
   end
@@ -107,9 +109,9 @@ defmodule LavaLink.Track do
     %{
       # green
       color: 0x00FF08,
-      description: {:LOC_TRACK_DESCRIPTION, prefix: "**>>**", info: to_info(track)},
+      description: Template.track_description("**>>**", to_info(track)),
       footer: %{
-        text: :LOC_TRACK_PLAY
+        text: Template.track_play()
       }
     }
   end
@@ -118,9 +120,9 @@ defmodule LavaLink.Track do
     %{
       # yellow
       color: 0xFFFF00,
-      description: {:LOC_TRACK_DESCRIPTION, prefix: "**++**", info: to_info(track)},
+      description: Template.track_description("**++**", to_info(track)),
       footer: %{
-        text: :LOC_TRACK_ADD
+        text: Template.track_add()
       }
     }
   end
@@ -129,9 +131,9 @@ defmodule LavaLink.Track do
     %{
       # dark blue
       color: 0x0800FF,
-      description: {:LOC_TRACK_DESCRIPTION, prefix: "**>>**", info: to_info(track, :now_playing)},
+      description: Template.track_description("**>>**", to_info(track, :now_playing)),
       footer: %{
-        text: :LOC_TRACK_NOW_PLAYING
+        text: Template.track_now_playing()
       }
     }
   end
@@ -140,9 +142,9 @@ defmodule LavaLink.Track do
     %{
       # red
       color: 0xFF0000,
-      description: {:LOC_TRACK_DESCRIPTION, prefix: "**--**", info: to_info(track)},
+      description: Template.track_description("**--**", to_info(track)),
       footer: %{
-        text: :LOC_TRACK_END
+        text: Template.track_end()
       }
     }
   end
@@ -151,9 +153,9 @@ defmodule LavaLink.Track do
     %{
       # grey
       color: 0x7F8C8D,
-      description: {:LOC_TRACK_DESCRIPTION, prefix: "**||**", info: to_info(track)},
+      description: Template.track_description("**||**", to_info(track)),
       footer: %{
-        text: :LOC_TRACK_PAUSE
+        text: Template.track_pause()
       }
     }
   end
@@ -180,7 +182,7 @@ defmodule LavaLink.Track do
       |> rem(86_400)
       |> format_seconds()
 
-    {:LOC_TRACK_LENGTH_DAYS, days: div(time, 86_400), rest: rest}
+    Template.track_length_days(div(time, 86_400), rest)
   end
 
   def format_seconds(time) when time > 3_600 do

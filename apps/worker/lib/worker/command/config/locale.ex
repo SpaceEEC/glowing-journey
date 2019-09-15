@@ -4,11 +4,11 @@ defmodule Worker.Command.Config.Locale do
   alias Worker.Command.Config
 
   @impl true
-  def description(), do: :LOC_LOCALE_DESCRIPTION
+  def description(), do: Template.locale_description()
   @impl true
-  def usages(), do: :LOC_LOCALE_USAGES
+  def usages(), do: Template.locale_usages()
   @impl true
-  def examples(), do: :LOC_LOCALE_EXAMPLES
+  def examples(), do: Template.locale_examples()
 
   @impl true
   def triggers(), do: ["locale", "lang", "language"]

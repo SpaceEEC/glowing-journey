@@ -4,11 +4,11 @@ defmodule Worker.Command.Music.Skip do
   alias Rpc.LavaLink
 
   @impl true
-  def description(), do: :LOC_SKIP_DESCRIPTION
+  def description(), do: Template.skip_description()
   @impl true
-  def usages(), do: :LOC_SKIP_USAGES
+  def usages(), do: Template.skip_usages()
   @impl true
-  def examples(), do: :LOC_SKIP_EXAMPLES
+  def examples(), do: Template.skip_examples()
 
   @impl true
   def triggers(), do: ["skip"]
@@ -39,10 +39,10 @@ defmodule Worker.Command.Music.Skip do
           skip(count, guild_id)
 
         {_count, ""} ->
-          :LOC_SKIP_LESS_THAN_ONE
+          Template.skip_less_than_one()
 
         :error ->
-          :LOC_SKIP_NAN
+          Template.skip_nan()
       end
 
     set_response(command, content: response)
@@ -54,6 +54,6 @@ defmodule Worker.Command.Music.Skip do
       |> LavaLink.skip(count)
       |> Enum.count()
 
-    {:LOC_SKIP_SKIPPED, count: to_string(count)}
+    Template.skip_skipped(count)
   end
 end

@@ -7,11 +7,11 @@ defmodule Worker.Command.Config.Blacklist do
   alias Worker.Resolver.User
 
   @impl true
-  def description(), do: :LOC_BLACKLIST_DESCRIPTION
+  def description(), do: Template.blacklist_description()
   @impl true
-  def usages(), do: :LOC_BLACKLIST_USAGES
+  def usages(), do: Template.blacklist_usages()
   @impl true
-  def examples(), do: :LOC_BLACKLIST_EXAMPLES
+  def examples(), do: Template.blacklist_examples()
 
   @impl true
   def triggers(), do: ["blacklist"]
@@ -34,14 +34,14 @@ defmodule Worker.Command.Config.Blacklist do
       |> String.slice(0..2047)
       |> case do
         "" ->
-          :LOC_BLACKLIST_NOBODY_BLACKLISTED
+          Template.blacklist_nobody_blacklisted()
 
         blacklsited ->
           "<@#{blacklsited}>"
       end
 
     embed = %{
-      title: :LOC_BLACKLIST_EMBED_TITLE,
+      title: Template.blacklist_embed_title(),
       description: blacklisted
     }
 
@@ -80,30 +80,30 @@ defmodule Worker.Command.Config.Blacklist do
   defp blacklist(user, guild, blacklist, author_id) do
     case User.resolve(user, guild) do
       nil ->
-        {:LOC_BLACKLIST_NO_USER, user: user}
+        Template.blacklist_no_user(user)
 
       %{bot: true} ->
-        :LOC_BLACKLIST_BOT
+        Template.blacklist_bot()
 
       %{id: ^author_id} ->
-        :LOC_BLACKLIST_SELF
+        Template.blacklist_self()
 
       user ->
         member = guild.members[user.id] || Rest.get_guild_member!(guild, user)
 
         # Ignore permissions check if you remove
         if blacklist and Permissions.implicit(member, guild) |> Permissions.has(:manage_guild) do
-          :LOC_BLACKLIST_PRIVILIGED
+          Template.blacklist_priviliged()
         else
           case Guild.blacklist(guild, user, blacklist) do
             :ok ->
-              {:LOC_BLACKLIST_BLACKLISTED, user: "#{user.username}##{user.discriminator}"}
+              Template.blacklist_blacklisted("#{user.username}##{user.discriminator}")
 
             1 ->
-              {:LOC_BLACKLIST_UNBLACKLISTED, user: "#{user.username}##{user.discriminator}"}
+              Template.blacklist_unblacklisted("#{user.username}##{user.discriminator}")
 
             0 ->
-              {:LOC_BLACKLIST_NOT_BLACKLISTED, user: "#{user.username}##{user.discriminator}"}
+              Template.blacklist_not_blacklisted("#{user.username}##{user.discriminator}")
           end
         end
     end

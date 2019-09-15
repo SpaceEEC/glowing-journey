@@ -5,11 +5,11 @@ defmodule Worker.Command.Music.NowPlaying do
   alias Rpc.LavaLink.Track
 
   @impl true
-  def description(), do: :LOC_NOWPLAYING_DESCRIPTION
+  def description(), do: Template.nowplaying_description()
   @impl true
-  def usages(), do: :LOC_NOWPLAYING_USAGES
+  def usages(), do: Template.nowplaying_usages()
   @impl true
-  def examples(), do: :LOC_NOWPLAYING_EXAMPLES
+  def examples(), do: Template.nowplaying_examples()
 
   @impl true
   def triggers(), do: ["nowplaying", "np"]

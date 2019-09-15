@@ -4,11 +4,11 @@ defmodule Worker.Command.Music.Remove do
   alias Rpc.LavaLink
 
   @impl true
-  def description(), do: :LOC_REMOVE_DESCRIPTION
+  def description(), do: Template.remove_description()
   @impl true
-  def usages(), do: :LOC_REMOVE_USAGES
+  def usages(), do: Template.remove_usages()
   @impl true
-  def examples(), do: :LOC_REMOVE_EXAMPLES
+  def examples(), do: Template.remove_examples()
 
   @impl true
   def triggers(), do: ["remove"]
@@ -23,7 +23,7 @@ defmodule Worker.Command.Music.Remove do
   @impl true
   def call(%{args: []} = command, _) do
     command
-    |> set_response(content: :LOC_GENERIC_NO_ARGS)
+    |> set_response(content: Template.generic_no_args())
   end
 
   def call(%{args: args, message: %{guild_id: guild_id}} = command, _) do
@@ -42,32 +42,32 @@ defmodule Worker.Command.Music.Remove do
   end
 
   def remove(:error, _count, _guild_id) do
-    :LOC_REMOVE_POSITION_NAN
+    Template.remove_position_nan()
   end
 
   def remove(_position, :error, _guild_id) do
-    :LOC_REMOVE_COUNT_NAN
+    Template.remove_count_nan()
   end
 
   def remove(position, _count, _guild_id)
       when position < 0 do
-    :LOC_REMOVE_POSITION_NEGATIVE
+    Template.remove_position_negative()
   end
 
   def remove(_position, count, _guild_id)
       when count < 1 do
-    :LOC_REMOVE_COUNT_SMALLER_ONE
+    Template.remove_count_smaller_one()
   end
 
   def remove(position, count, guild_id) do
     case LavaLink.remove(guild_id, position + 1, count) do
       nil ->
-        :LOC_REMOVE_POSITION_OUT_OF_BOUNDS
+        Template.remove_position_out_of_bounds()
 
       tracks ->
         count = Enum.count(tracks)
 
-        {:LOC_REMOVE_REMOVED, count: to_string(count)}
+        Template.remove_removed(count)
     end
   end
 

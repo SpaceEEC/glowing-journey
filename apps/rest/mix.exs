@@ -25,7 +25,7 @@ defmodule Rest.MixProject do
   defp deps do
     [
       {:rpc, in_umbrella: true},
-      {:crux_rest, "~> 0.2.0"}
+      {:crux_rest, "~> 0.2"}
     ]
   end
 end

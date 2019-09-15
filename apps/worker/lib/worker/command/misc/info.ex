@@ -2,11 +2,13 @@ defmodule Worker.Command.Misc.Info do
   use Worker.Command
 
   @impl true
-  def description(), do: :LOC_INFO_DESCRIPTION
+  def description(), do: Template.info_description()
+
   @impl true
-  def usages(), do: :LOC_INFO_USAGES
+  def usages(), do: Template.info_usages()
+
   @impl true
-  def examples(), do: :LOC_INFO_EXAMPLES
+  def examples(), do: Template.info_examples()
 
   @impl true
   def triggers(), do: ["info"]

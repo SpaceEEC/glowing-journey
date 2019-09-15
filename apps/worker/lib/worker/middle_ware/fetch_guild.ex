@@ -5,6 +5,8 @@ defmodule Worker.MiddleWare.FetchGuild do
     If the command originates from a dm, `nil` will be assigned.
   """
 
+  alias Util.Locale.Template
+
   use Worker.MiddleWare
 
   require Logger
@@ -32,7 +34,7 @@ defmodule Worker.MiddleWare.FetchGuild do
         Logger.warn(fn -> "Could not find a guild with the id #{guild_id} in the cache." end)
 
         command
-        |> set_response(content: :LOC_FETCHGUILD_UNCACHED)
+        |> set_response(content: Template.fetchguild_uncached())
         |> halt()
     end
   end

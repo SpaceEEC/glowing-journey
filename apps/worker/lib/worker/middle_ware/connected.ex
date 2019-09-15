@@ -9,6 +9,7 @@ defmodule Worker.MiddleWare.Connected do
   """
 
   use Worker.MiddleWare
+  alias Util.Locale.Template
 
   # if bot is connected it must be in the same channel, except on summon, there it's the opposite
 
@@ -43,14 +44,14 @@ defmodule Worker.MiddleWare.Connected do
           command
         else
           command
-          |> set_response(content: :LOC_CONNECTED_BOT_NOT_CONNECTED)
+          |> set_response(content: Template.connected_bot_not_connected())
           |> halt()
         end
 
       # All other commands require the user to be connected
       not connected?(user_id, voice_states) ->
         command
-        |> set_response(content: :LOC_CONNECTED_USER_NOT_CONNECTED)
+        |> set_response(content: Template.connected_user_not_connected())
         |> halt()
 
       # In case of summon the bot must be connected and in a different channel
@@ -59,13 +60,13 @@ defmodule Worker.MiddleWare.Connected do
           # Not connected
           not connected?(bot_id, voice_states) ->
             command
-            |> set_response(content: :LOC_CONNECTED_SUMMON_NOT_CONNECTED)
+            |> set_response(content: Template.connected_summon_not_connected())
             |> halt()
 
           # Same channel
           get_channel_id(user_id, voice_states) == get_channel_id(bot_id, voice_states) ->
             command
-            |> set_response(content: :LOC_CONNECTED_SUMMON_SAME_CHANNEL)
+            |> set_response(content: Template.connected_summon_same_channel())
             |> halt()
 
           true ->
@@ -83,13 +84,13 @@ defmodule Worker.MiddleWare.Connected do
       # Bot is not connected
       not connected?(bot_id, voice_states) ->
         command
-        |> set_response(content: :LOC_CONNECTED_BOT_NOT_CONNECTED)
+        |> set_response(content: Template.connected_bot_not_connected())
         |> halt()
 
       # User is not connected
       true ->
         command
-        |> set_response(content: :LOC_CONNECTED_DIFFERENT_CHANNELS)
+        |> set_response(content: Template.connected_user_not_connected())
         |> halt()
     end
   end

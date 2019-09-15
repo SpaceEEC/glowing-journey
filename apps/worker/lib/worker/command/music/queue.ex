@@ -6,11 +6,11 @@ defmodule Worker.Command.Music.Queue do
   alias Worker.Command.Music.NowPlaying
 
   @impl true
-  def description(), do: :LOC_QUEUE_DESCRIPTION
+  def description(), do: Template.queue_description()
   @impl true
-  def usages(), do: :LOC_QUEUE_USAGES
+  def usages(), do: Template.queue_usages()
   @impl true
-  def examples(), do: :LOC_QUEUE_EXAMPLES
+  def examples(), do: Template.queue_examples()
 
   @impl true
   def triggers(), do: ["queue", "q"]
@@ -28,10 +28,10 @@ defmodule Worker.Command.Music.Queue do
         queue(page, command)
 
       {_page, ""} ->
-        set_response(command, content: :LOC_QUEUE_LESS_THAN_ONE)
+        set_response(command, content: Template.queue_less_than_one())
 
       _ ->
-        set_response(command, content: :LOC_QUEUE_NAN)
+        set_response(command, content: Template.queue_nan())
     end
   end
 
@@ -71,17 +71,15 @@ defmodule Worker.Command.Music.Queue do
           |> Track.to_embed(:now_playing)
           |> Map.merge(
             %{
-              title:
-                {:LOC_QUEUE_EMBED_TITLE,
-                 queue_length: to_string(queue_length), queue_time: queue_time},
+              title: Template.queue_embed_title(queue_length, queue_time),
               description: queue_string,
               footer: %{
-                text: {:LOC_QUEUE_PAGES, page: to_string(page), max_page: to_string(max_page)}
+                text: Template.queue_pages(page, max_page)
               }
             },
             fn
               :description, current, ^queue_string ->
-                {:LOC_QUEUE_EMBED_DESCRIPTION, current: current, queue: queue_string}
+                Template.queue_embed_description(current, queue_string)
 
               :footer, old, %{text: text} ->
                 %{old | text: text}

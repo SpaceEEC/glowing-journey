@@ -4,11 +4,11 @@ defmodule Worker.Command.Music.Loop do
   alias Rpc.LavaLink
 
   @impl true
-  def description(), do: :LOC_LOOP_DESCRIPTION
+  def description(), do: Template.loop_description()
   @impl true
-  def usages(), do: :LOC_LOOP_USAGES
+  def usages(), do: Template.loop_usages()
   @impl true
-  def examples(), do: :LOC_LOOP_EXAMPLES
+  def examples(), do: Template.loop_examples()
 
   @impl true
   def triggers(), do: ["loop"]
@@ -24,9 +24,9 @@ defmodule Worker.Command.Music.Loop do
   def call(%{args: [], message: %{guild_id: guild_id}} = command, _) do
     content =
       if LavaLink.loop(guild_id) do
-        :LOC_LOOP_ENABLED
+        Template.loop_enabled()
       else
-        :LOC_LOOP_DISABLED
+        Template.loop_disabled()
       end
 
     set_response(command, content: content)
@@ -49,12 +49,12 @@ defmodule Worker.Command.Music.Loop do
 
     content =
       if state == :error do
-        :LOC_LOOP_INVALID_STATE
+        Template.loop_invalid_state()
       else
         if LavaLink.loop(guild_id, state) do
-          :LOC_LOOP_UPDATED
+          Template.loop_updated()
         else
-          :LOC_LOOP_ALREADY
+          Template.loop_already()
         end
       end
 

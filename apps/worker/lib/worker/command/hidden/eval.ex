@@ -2,11 +2,11 @@ defmodule Worker.Command.Hidden.Eval do
   use Worker.Command
 
   @impl true
-  def description(), do: :LOC_EVAL_DESCRIPTION
+  def description(), do: Template.eval_description()
   @impl true
-  def usages(), do: :LOC_EVAL_USAGES
+  def usages(), do: Template.eval_usages()
   @impl true
-  def examples(), do: :LOC_EVAL_EXAMPLES
+  def examples(), do: Template.eval_examples()
 
   @impl true
   def triggers(), do: ["eval"]

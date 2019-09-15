@@ -2,11 +2,11 @@ defmodule Worker.Command.Misc.Uptime do
   use Worker.Command
 
   @impl true
-  def description(), do: :LOC_UPTIME_DESCRIPTION
+  def description(), do: Template.uptime_description()
   @impl true
-  def usages(), do: :LOC_UPTIME_USAGES
+  def usages(), do: Template.uptime_usages()
   @impl true
-  def examples(), do: :LOC_UPTIME_EXAMPLES
+  def examples(), do: Template.uptime_examples()
 
   @impl true
   def triggers(), do: ["uptime"]
@@ -28,7 +28,7 @@ defmodule Worker.Command.Misc.Uptime do
         "#{String.pad_trailing(node, longest)} :: #{uptime}"
       end)
 
-    set_response(command, content: {:LOC_UPTIME, [content: content]})
+    set_response(command, content: Template.uptime(content))
   end
 
   defp fetch_nodes_data(nodes) do

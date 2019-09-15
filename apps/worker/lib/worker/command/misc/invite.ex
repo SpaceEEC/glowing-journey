@@ -8,11 +8,11 @@ defmodule Worker.Command.Misc.Invite do
   alias Crux.Structs.Permissions
 
   @impl true
-  def description(), do: :LOC_INVITE_DESCRIPTION
+  def description(), do: Template.invite_description()
   @impl true
-  def usages(), do: :LOC_INVITE_USAGES
+  def usages(), do: Template.invite_usages()
   @impl true
-  def examples(), do: :LOC_INVITE_EXAMPLES
+  def examples(), do: Template.invite_examples()
 
   @impl true
   def triggers(), do: ["invite"]
@@ -45,10 +45,10 @@ defmodule Worker.Command.Misc.Invite do
 
     embed = %{
       author: %{
-        name: :LOC_INVITE,
+        name: Template.invite(),
         url: url
       },
-      description: {:LOC_INVITE_EMBED_DESCRIPTION, [url: url]}
+      description: Template.invite_embed_description(url)
     }
 
     command

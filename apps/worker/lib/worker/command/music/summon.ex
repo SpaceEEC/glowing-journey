@@ -4,11 +4,11 @@ defmodule Worker.Command.Music.Summon do
   alias Rpc.Gateway
 
   @impl true
-  def description(), do: :LOC_SUMMON_DESCRIPTION
+  def description(), do: Template.summon_description()
   @impl true
-  def usages(), do: :LOC_SUMMON_USAGES
+  def usages(), do: Template.summon_usages()
   @impl true
-  def examples(), do: :LOC_SUMMON_EXAMPLES
+  def examples(), do: Template.summon_examples()
 
   @impl true
   def triggers(), do: ["summon"]
@@ -31,6 +31,6 @@ defmodule Worker.Command.Music.Summon do
       ) do
     :ok = Gateway.voice_state_update(shard_id, guild_id, voice_states[user_id].channel_id)
 
-    set_response(command, content: :LOC_SUMMON_SUMMONED)
+    set_response(command, content: Template.summon_summoned())
   end
 end

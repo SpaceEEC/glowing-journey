@@ -5,11 +5,11 @@ defmodule Worker.Command.Music.Save do
   alias Rpc.LavaLink.Track
 
   @impl true
-  def description(), do: :LOC_SAVE_DESCRIPTION
+  def description(), do: Template.save_description()
   @impl true
-  def usages(), do: :LOC_SAVE_USAGES
+  def usages(), do: Template.save_usages()
   @impl true
-  def examples(), do: :LOC_SAVE_EXAMPLES
+  def examples(), do: Template.save_examples()
 
   @impl true
   def triggers(), do: ["save"]

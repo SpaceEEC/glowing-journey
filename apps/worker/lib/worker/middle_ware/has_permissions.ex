@@ -19,6 +19,7 @@ defmodule Worker.MiddleWare.HasPermissions do
 
   alias Worker.MiddleWare.OwnerOnly
   alias Rpc.Cache
+  alias Util.Locale.Template
 
   alias Crux.Structs.Permissions
 
@@ -82,14 +83,19 @@ defmodule Worker.MiddleWare.HasPermissions do
             end)
 
           command
-          |> set_response(content: {get_locale_key(target), permissions: missing})
+          |> set_response(content: get_response(target, missing))
           |> halt()
       end
     end
   end
 
-  defp get_locale_key(:self), do: :LOC_HASPERMISSIONS_SELF_MISSING_PERMISSIONS
-  defp get_locale_key(:member), do: :LOC_HASPERMISSIONS_MEMBER_MISSING_PERMISSIONS
+  defp get_response(:self, permissions) do
+    Template.haspermissions_self_missing_permissions(permissions)
+  end
+
+  defp get_response(:member, permissions) do
+    Template.haspermissions_member_missing_permissions(permissions)
+  end
 
   defp get_channel(nil, _message), do: nil
 

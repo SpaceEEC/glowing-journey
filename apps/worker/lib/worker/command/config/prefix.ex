@@ -4,11 +4,11 @@ defmodule Worker.Command.Config.Prefix do
   alias Worker.Command.Config
 
   @impl true
-  def description(), do: :LOC_PREFIX_DESCRIPTION
+  def description(), do: Template.prefix_description()
   @impl true
-  def usages(), do: :LOC_PREFIX_USAGES
+  def usages(), do: Template.prefix_usages()
   @impl true
-  def examples(), do: :LOC_PREFIX_EXAMPLES
+  def examples(), do: Template.prefix_examples()
 
   @impl true
   def triggers(), do: ["prefix"]

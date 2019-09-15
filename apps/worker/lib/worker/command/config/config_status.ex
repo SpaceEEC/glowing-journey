@@ -4,13 +4,13 @@ defmodule Worker.Command.Config.ConfigStatus do
   alias Util.Config.Guild
 
   @impl true
-  def description(), do: :LOC_CONFIGSTATUS_DESCRIPTION
+  def description(), do: Template.configstatus_description()
 
   @impl true
-  def usages(), do: :LOC_CONFIGSTATUS_USAGES
+  def usages(), do: Template.configstatus_usages()
+
   @impl true
-  @spec examples :: :LOC_CONFIGSTATUS_EXAMPLES
-  def examples(), do: :LOC_CONFIGSTATUS_EXAMPLES
+  def examples(), do: Template.configstatus_examples()
 
   @impl true
   def triggers(), do: ["config-status", "conf-status"]
@@ -40,6 +40,6 @@ defmodule Worker.Command.Config.ConfigStatus do
         "#{key} :: #{value}"
       end)
 
-    set_response(command, content: {:LOC_CONFIGSTATUS_RESPONSE, config: config})
+    set_response(command, content: Template.configstatus_response(config))
   end
 end

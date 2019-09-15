@@ -4,11 +4,11 @@ defmodule Worker.Command.Music.Pause do
   alias Rpc.LavaLink
 
   @impl true
-  def description(), do: :LOC_PAUSE_DESCRIPTION
+  def description(), do: Template.pause_description()
   @impl true
-  def usages(), do: :LOC_PAUSE_USAGES
+  def usages(), do: Template.pause_usages()
   @impl true
-  def examples(), do: :LOC_PAUSE_EXAMPLES
+  def examples(), do: Template.pause_examples()
   @impl true
   def triggers(), do: ["pause"]
   @impl true
@@ -23,9 +23,9 @@ defmodule Worker.Command.Music.Pause do
   def call(%{message: %{guild_id: guild_id}} = command, _) do
     content =
       if LavaLink.pause(guild_id) do
-        :LOC_PAUSE_PAUSED
+        Template.pause_paused()
       else
-        :LOC_PAUSE_ALREADY
+        Template.pause_already()
       end
 
     set_response(command, content: content)
