@@ -3,7 +3,7 @@
   "crux_base": {:git, "https://github.com/spaceeec/crux_base", "abfb77d5e2803875c4fa9111148584d88f7e6fce", []},
   "crux_cache": {:hex, :crux_cache, "0.2.0", "85ff902d82cfb20e92561808914f6e9cc81ba7e629189636297ed53f889765c8", [:mix], [{:crux_structs, "~> 0.2.0", [hex: :crux_structs, repo: "hexpm", optional: false]}], "hexpm"},
   "crux_extensions": {:git, "https://github.com/spaceeec/crux_extensions.git", "9688253c33ecd2a3015f50886b385522020599f5", [branch: "feat/handler_options"]},
-  "crux_gateway": {:hex, :crux_gateway, "0.2.0", "b871d08ba8e3de80d3cc3f1c6f61882220c3e2c4e31f92ee4e261fb4722b46d5", [:mix], [{:gen_stage, "~> 0.13.1", [hex: :gen_stage, repo: "hexpm", optional: false]}, {:poison, "~> 3.1.0", [hex: :poison, repo: "hexpm", optional: false]}, {:websockex, "~> 0.4.1", [hex: :websockex, repo: "hexpm", optional: false]}], "hexpm"},
+  "crux_gateway": {:hex, :crux_gateway, "0.2.2", "f07199f739d1507de5d04244c606eee3243f36b097ec204fc3e4b16f074133e3", [:mix], [{:gen_stage, "~> 0.13.1", [hex: :gen_stage, repo: "hexpm", optional: false]}, {:poison, "~> 3.1.0", [hex: :poison, repo: "hexpm", optional: false]}, {:websockex, "~> 0.4.1", [hex: :websockex, repo: "hexpm", optional: false]}], "hexpm"},
   "crux_rest": {:git, "https://github.com/spaceeec/crux_rest.git", "dd41c4208e2519b2a0d94519766753af05604d5a", []},
   "crux_structs": {:hex, :crux_structs, "0.2.1", "17c625b94b9807fceccd94219d4b7495529f65528aef64bea54f68dbb9398264", [:mix], [], "hexpm"},
   "ex_link": {:git, "https://github.com/spaceeec/ex_link.git", "8c5f9dae38384ec2e98b23f2c843ad1aac91459d", []},
