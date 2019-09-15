@@ -179,12 +179,18 @@ defmodule Util.Locale.Template do
     # Variables intead of literals so the parameter keep their names
     arg_list = Enum.map(args, &Macro.var(&1, Elixir))
     # The return values, tuples of variable name and variable value
+
     arg_tuples =
       Enum.map(
         args,
         &{&1,
          quote do
-           to_string(unquote(Macro.var(&1, Elixir)))
+           if is_tuple(unquote(Macro.var(&1, Elixir))) and
+                tuple_size(unquote(Macro.var(&1, Elixir))) == 2 do
+             unquote(Macro.var(&1, Elixir))
+           else
+             to_string(unquote(Macro.var(&1, Elixir)))
+           end
          end}
       )
 
