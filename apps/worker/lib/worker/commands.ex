@@ -34,6 +34,7 @@ defmodule Worker.Commands do
     Command.Hidden.Member,
     Command.Hidden.Role,
     Command.Hidden.User,
+    Command.Misc.Avatar,
     Command.Misc.Help,
     Command.Misc.Info,
     Command.Misc.Invite,

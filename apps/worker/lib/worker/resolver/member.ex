@@ -60,11 +60,19 @@ defmodule Worker.Resolver.Member do
     end
   end
 
-  def fetch_user(user_id) do
+  def fetch_user(user_id, cache \\ true) do
     with :error <- Cache.fetch(User, user_id),
-         :error <- Rest.get_user(user_id) do
-      nil
+         {:ok, user} <- Rest.Raw.get_user(user_id) do
+      if cache do
+        Cache.insert(User, user)
+      end
+
+      user
+      |> Crux.Structs.create(User)
     else
+      :error ->
+        nil
+
       {:ok, user} ->
         user
     end

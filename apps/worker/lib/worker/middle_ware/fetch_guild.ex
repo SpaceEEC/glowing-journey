@@ -26,7 +26,7 @@ defmodule Worker.MiddleWare.FetchGuild do
     Cache.fetch(Guild, guild_id)
     |> case do
       {:ok, guild} ->
-        Logger.debug(fn -> "Successfuyll fetched guild #{guild_id}" end)
+        Logger.debug(fn -> "Successfully fetched guild #{guild_id}" end)
 
         assign(command, :guild, guild)
 

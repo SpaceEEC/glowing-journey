@@ -8,12 +8,12 @@ defmodule Worker.Resolver.User do
       [_, "", id] ->
         id
         |> String.to_integer()
-        |> Member.fetch_user()
+        |> Member.fetch_user(false)
 
       [_, id] ->
         id
         |> String.to_integer()
-        |> Member.fetch_user()
+        |> Member.fetch_user(false)
 
       nil ->
         if guild do

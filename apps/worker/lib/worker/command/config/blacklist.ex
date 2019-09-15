@@ -80,7 +80,7 @@ defmodule Worker.Command.Config.Blacklist do
   defp blacklist(user, guild, blacklist, author_id) do
     case User.resolve(user, guild) do
       nil ->
-        Template.blacklist_no_user(user)
+        Template.generic_no_user(user)
 
       %{bot: true} ->
         Template.blacklist_bot()

@@ -4,6 +4,17 @@ defmodule Util.Locale.EN do
   def code(), do: "EN"
   def friendly_name(), do: "English (English)"
 
+  @avatar %{
+    AVATAR_DESCRIPTION: "Shows the avatar of the requested user.",
+    AVATAR_USAGES: "**Usage**: `avatar <User>`",
+    AVATAR_EXAMPLES: """
+    **Examples**:
+    - `avatar 218348062828003328`
+    - `avatar @space#0001`
+    - `avatar space`
+    """,
+  }
+
   @blacklist %{
     BLACKLIST_DESCRIPTION: "Blacklist or unblacklist a user.",
     BLACKLIST_USAGES: """
@@ -20,7 +31,6 @@ defmodule Util.Locale.EN do
     - `blacklist add 218348062828003328` (blacklist)
     - `blacklist remove 218348062828003328` (unblacklist)
     """,
-    BLACKLIST_NO_USER: "Could not found a user with ``{{user}}``.",
     BLACKLIST_BOT: "Not neeed, I already ignore all bots.",
     BLACKLIST_SELF: "I don't think you want to blacklist yourself.",
     BLACKLIST_PRIVILIGED: "You may not blacklist a priviliged user.",
@@ -137,7 +147,8 @@ defmodule Util.Locale.EN do
   @generic %{
     GENERIC_NO_ARGS: """
     This command requires you to provide arguments and I fear I can not find any in your message.
-    """
+    """,
+    GENERIC_NO_USER: "Could not found a user with ``{{user}}``."
   }
 
   @haspermissions %{
@@ -451,6 +462,7 @@ defmodule Util.Locale.EN do
   }
 
   @localization %{}
+                |> Map.merge(@avatar, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@blacklist, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@config, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@configstatus, &Util.Locale.raise_duplicate_key/3)

@@ -1,9 +1,11 @@
 defmodule Util.Locale.Template do
   @templates %{
+    AVATAR_DESCRIPTION: [],
+    AVATAR_USAGES: [],
+    AVATAR_EXAMPLES: [],
     BLACKLIST_DESCRIPTION: [],
     BLACKLIST_USAGES: [],
     BLACKLIST_EXAMPLES: [],
-    BLACKLIST_NO_USER: [:user],
     BLACKLIST_BOT: [],
     BLACKLIST_SELF: [],
     BLACKLIST_PRIVILIGED: [],
@@ -43,6 +45,7 @@ defmodule Util.Locale.Template do
     FETCHGUILD_UNCACHED: [],
     FETCHMEMBER_FAILED: [],
     GENERIC_NO_ARGS: [],
+    GENERIC_NO_USER: [:user],
     HASPERMISSIONS_SELF_MISSING_PERMISSIONS: [:permissions],
     HASPERMISSIONS_MEMBER_MISSING_PERMISSIONS: [:permissions],
     HELP_DESCRIPTION: [],

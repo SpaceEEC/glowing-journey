@@ -4,6 +4,17 @@ defmodule Util.Locale.DE do
   def code(), do: "DE"
   def friendly_name(), do: "German (Deutsch)"
 
+  @avatar %{
+    AVATAR_DESCRIPTION: "Zeigt das Avatar des gewünschten Nutzers an.",
+    AVATAR_USAGES: "**Anwendung**: `avatar <User>`",
+    AVATAR_EXAMPLES: """
+    **Beispiele**:
+    - `avatar 218348062828003328`
+    - `avatar @space#0001`
+    - `avatar space`
+    """,
+  }
+
   @blacklist %{
     BLACKLIST_DESCRIPTION: "Blackliste einen Nutzer auf diesem Server oder hebe diesen auf.",
     BLACKLIST_USAGES: """
@@ -20,7 +31,6 @@ defmodule Util.Locale.DE do
     - `blacklist add 218348062828003328`
     - `blacklist remove 218348062828003328`
     """,
-    BLACKLIST_NO_USER: "Ich konnte keinen Nutzer mithilfe von ``{{user}}`` finden.",
     BLACKLIST_BOT: "Nicht nötig, ich ignoriere bereits sämtliche Bots.",
     BLACKLIST_SELF: "Sich selbst auf die Blacklist schreiben? Ich denke nicht.",
     BLACKLIST_PRIVILIGED: """
@@ -142,7 +152,8 @@ defmodule Util.Locale.DE do
     GENERIC_NO_ARGS: """
     Dieser Befehl benötigt zum Ausführen Argumente, und ich sehe hier keine.
     Nutze den `help` Befehl für mehr Informationen.
-    """
+    """,
+    GENERIC_NO_USER: "Ich konnte keinen Nutzer mithilfe von ``{{user}}`` finden."
   }
 
   @haspermissions %{
@@ -458,6 +469,7 @@ defmodule Util.Locale.DE do
   }
 
   @localization %{}
+                |> Map.merge(@avatar, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@blacklist, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@config, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@configstatus, &Util.Locale.raise_duplicate_key/3)
