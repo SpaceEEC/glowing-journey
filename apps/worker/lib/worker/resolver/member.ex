@@ -2,6 +2,8 @@ defmodule Worker.Resolver.Member do
   alias Rpc.{Cache, Rest}
   alias Simetric.Levenshtein
 
+  @max_dist 3
+
   def resolve(query, guild)
 
   def resolve(query, %{assigns: %{guild: guild}}) when not is_nil(guild) do
@@ -29,7 +31,7 @@ defmodule Worker.Resolver.Member do
           nil ->
             nil
 
-          {dist, _member} when dist > 3 ->
+          {dist, _member} when dist > @max_dist ->
             nil
 
           {_dist, member} ->
@@ -46,26 +48,25 @@ defmodule Worker.Resolver.Member do
   end
 
   def get_dist(%{user: user_id}, query) do
-    fetch_user(user_id)
-    |> Map.get(:username)
-    |> String.downcase()
-    |> Levenshtein.compare(query)
+    case fetch_user(user_id) do
+      nil ->
+        @max_dist + 1
+
+      user ->
+        user
+        |> Map.get(:username)
+        |> String.downcase()
+        |> Levenshtein.compare(query)
+    end
   end
 
   def fetch_user(user_id) do
-    case Cache.fetch(User, user_id) do
+    with :error <- Cache.fetch(User, user_id),
+         :error <- Rest.get_user(user_id) do
+      nil
+    else
       {:ok, user} ->
         user
-
-      :error ->
-        request =
-          Crux.Rest.Functions.get_user(user_id)
-          |> Map.put(:transform, nil)
-
-        user = Rest.request!(request)
-
-        Cache.insert(User, user)
-        |> Crux.Structs.User.create()
     end
   end
 
