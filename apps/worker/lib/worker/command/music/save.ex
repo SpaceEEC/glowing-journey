@@ -24,7 +24,7 @@ defmodule Worker.Command.Music.Save do
       |> Track.to_embed(:save)
 
     case Rest.create_reaction(message, "💾") do
-      {:ok, _} ->
+      :ok ->
         nil
 
       {:error, error} ->
