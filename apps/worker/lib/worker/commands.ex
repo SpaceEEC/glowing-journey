@@ -81,6 +81,17 @@ defmodule Worker.Commands do
   def handle(message, shard_id) do
     require Logger
 
+    Sentry.Context.set_user_context(%{
+      user_id: message.author.id,
+      guild_id: message.guild_id,
+      channel_id: message.channel_id,
+      content: message.content
+    })
+
+    Sentry.Context.set_tags_context(%{
+      shard_id: shard_id
+    })
+
     # Logger.info("handling message from #{message.author.username}: #{message.content}")
 
     prefixes = get_prefixes(message)
@@ -111,12 +122,7 @@ defmodule Worker.Commands do
             error,
             stacktrace: __STACKTRACE__,
             tags: %{
-              command: mod.triggers() |> List.first(),
-              shard_id: shard_id
-            },
-            user: %{
-              user_id: message.author.id,
-              guild_id: message.guild_id
+              command: mod.triggers() |> List.first()
             }
           )
 
