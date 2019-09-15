@@ -93,6 +93,10 @@ defmodule Worker.Command.Misc.Uptime do
     "Local"
   end
 
+  defp format_node_name(:"offline@127.0.0.1") do
+    "Local"
+  end
+
   defp format_node_name(node) when is_atom(node) do
     node
     |> to_string()
