@@ -67,7 +67,7 @@ defmodule Worker.Command.Config do
     case transform_value(command, internal_key, value) do
       {:ok, value} ->
         fun = String.to_existing_atom("put_#{internal_key}")
-        apply(Guild, fun, [guild_id, value])
+        :ok = apply(Guild, fun, [guild_id, value])
 
         set_response(command, content: Template.config_put_value(key))
 
@@ -139,6 +139,19 @@ defmodule Worker.Command.Config do
     else
       names = Enum.map_join(names, "\n", fn {code, name} -> "#{code} - #{name}" end)
       {:error, Template.config_locale_unknown(names)}
+    end
+  end
+
+  defp transform_value(_command, "volume", value) do
+    case Integer.parse(value) do
+      {value, ""} when value in 0..1000 ->
+        {:ok, to_string(value)}
+
+      {_other, ""} ->
+        {:error, Template.volume_out_of_bounds()}
+
+      _other ->
+        {:error, Template.volume_nan()}
     end
   end
 

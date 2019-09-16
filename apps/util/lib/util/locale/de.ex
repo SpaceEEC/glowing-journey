@@ -463,7 +463,7 @@ defmodule Util.Locale.DE do
     - `volume 0` (setze neue)
     """,
     VOLUME_CURRENT: "Die aktuelle Lautstärke ist {{volume}}/1000",
-    VOLUME_SET: "Neue Lautstärke gesetzt.",
+    VOLUME_SET: "Die Lautstärke ist jetzt {{volume}}/1000.",
     VOLUME_NAN: "Ich konnte diese Lautstärke nicht als Zahl interpretieren.",
     VOLUME_OUT_OF_BOUNDS: "Die Lautstärke muss mindestens 0 und maximal 1000 sein."
   }

@@ -164,7 +164,7 @@ defmodule Util.Locale.Template do
     VOLUME_USAGES: [],
     VOLUME_EXAMPLES: [],
     VOLUME_CURRENT: [:volume],
-    VOLUME_SET: [],
+    VOLUME_SET: [:volume],
     VOLUME_NAN: [],
     VOLUME_OUT_OF_BOUNDS: []
   }

@@ -456,7 +456,7 @@ defmodule Util.Locale.EN do
     - `volume 0` (set new)
     """,
     VOLUME_CURRENT: "The current volume is {{volume}}/1000",
-    VOLUME_SET: "New volume set.",
+    VOLUME_SET: "The volume is now {{volume}}/1000.",
     VOLUME_NAN: "I could not interpret the voume as a number.",
     VOLUME_OUT_OF_BOUNDS: "The volume must be at least 0 and at max 1000."
   }

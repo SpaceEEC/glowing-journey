@@ -1,6 +1,7 @@
 defmodule Worker.Command.Music.Volume do
   use Worker.Command
 
+  alias Util.Config.Guild
   alias Rpc.LavaLink
 
   @impl true
@@ -28,8 +29,9 @@ defmodule Worker.Command.Music.Volume do
         {volume, ""}
         when volume in 0..1000 ->
           :ok = LavaLink.volume(guild_id, volume)
+          :ok = Guild.put_volume(guild_id, to_string(volume))
 
-          Template.volume_set()
+          Template.volume_set(volume)
 
         {_volume, ""} ->
           Template.volume_out_of_bounds()

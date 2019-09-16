@@ -4,7 +4,7 @@ defmodule Util.Config.Guild do
   @string_keys ~w(join_message leave_message)
   @role_keys ~w(dj_role)
   @channel_keys ~w(join_channel leave_channel voice_log_channel dj_channel)
-  @keys @string_keys ++ @channel_keys ++ @role_keys ++ ~w(prefix locale)
+  @keys @string_keys ++ @channel_keys ++ @role_keys ++ ~w(volume prefix locale)
 
   def get_keys(), do: @keys
   def string_keys(), do: @string_keys
@@ -85,7 +85,7 @@ defmodule Util.Config.Guild do
 
     value = Etcd.get("#{@guild_prefix}:#{id}:#{key}", default)
 
-    if value != nil and (key in @channel_keys or key in @role_keys) do
+    if is_binary(value) and (key in @channel_keys or key in @role_keys or key == "volume") do
       String.to_integer(value)
     else
       value

@@ -93,15 +93,15 @@ defmodule Worker.Commands do
       shard_id: shard_id
     })
 
-    # Logger.info("handling message from #{message.author.username}: #{message.content}")
+    Logger.info("handling message from #{message.author.username}: #{message.content}")
 
     prefixes = get_prefixes(message)
 
-    # Logger.info("fetched prefixes: #{inspect(prefixes)}")
+    Logger.info("fetched prefixes: #{inspect(prefixes)}")
 
     command = get_command(message, prefixes, shard_id)
 
-    # Logger.info("found command #{inspect(command, limit: 3)}")
+    Logger.info("found command #{inspect(command, limit: 3)}")
 
     command =
       if message.author.id not in get_owners() do
@@ -110,7 +110,7 @@ defmodule Worker.Commands do
         command
       end
 
-    # Logger.info("blacklisted #{inspect(command, limit: 2)}")
+    Logger.info("blacklisted #{inspect(command, limit: 4)}")
 
     result =
       try do

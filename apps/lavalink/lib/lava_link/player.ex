@@ -5,6 +5,7 @@ defmodule LavaLink.Player do
 
   alias Rpc.{Rest, Gateway}
   alias LavaLink.Track
+  alias Util.Config.Guild
   alias Util.Locale
   alias Util.Locale.Template
 
@@ -42,17 +43,24 @@ defmodule LavaLink.Player do
 
   def init(client, guild_id)
       when not is_nil(client) and not is_nil(guild_id) do
-    state = %__MODULE__{
-      client: client,
-      guild_id: guild_id,
-      # TODO: calculate manually
-      shard_id: 0
-    }
-
     Rpc.Sentry.debug(
       "[---------------------------------------] INIT #{inspect(self())} [---------------------------------------]",
       "player"
     )
+
+    state = %__MODULE__{
+      client: client,
+      guild_id: guild_id,
+      volume: Guild.get_volume(guild_id, 100),
+      # TODO: calculate manually
+      shard_id: 0
+    }
+
+    unless state.volume == 100 do
+      state.volume
+      |> Message.volume(guild_id)
+      |> send_message()
+    end
 
     {:ok, state}
   end
