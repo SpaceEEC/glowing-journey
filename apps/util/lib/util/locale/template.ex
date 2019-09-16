@@ -185,11 +185,10 @@ defmodule Util.Locale.Template do
         args,
         &{&1,
          quote do
-           if is_tuple(unquote(Macro.var(&1, Elixir))) and
-                tuple_size(unquote(Macro.var(&1, Elixir))) == 2 do
-             unquote(Macro.var(&1, Elixir))
-           else
+           if to_string?(unquote(Macro.var(&1, Elixir))) do
              to_string(unquote(Macro.var(&1, Elixir)))
+           else
+             unquote(Macro.var(&1, Elixir))
            end
          end}
       )
@@ -198,6 +197,17 @@ defmodule Util.Locale.Template do
       {unquote(key), unquote(arg_tuples)}
     end
   end
+
+  defp to_string?({atom, list})
+       when is_atom(atom) and is_list(list) do
+    false
+  end
+
+  defp to_string?(list) when is_list(list) do
+    false
+  end
+
+  defp to_string?(_other), do: true
 
   def verify(locale) do
     localization = locale.get_localization()
