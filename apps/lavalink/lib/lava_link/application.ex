@@ -4,9 +4,14 @@ defmodule LavaLink.Application do
   @moduledoc false
 
   use Application
+  require Rpc
 
   def start(_type, _args) do
     Rpc.Sentry.install()
+
+    unless Rpc.is_offline() do
+      Application.put_env(:sentry, :tags, %{node: node()})
+    end
 
     # List all child processes to be supervised
     children = [

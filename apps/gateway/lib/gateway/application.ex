@@ -3,6 +3,7 @@ defmodule Gateway.Application do
 
   use Application
   require Rpc
+  require Logger
 
   @name Gateway
   def name(), do: @name
@@ -10,7 +11,17 @@ defmodule Gateway.Application do
   def start(_type, _args) do
     Rpc.Sentry.install()
 
-    if Rpc.is_offline(), do: Application.ensure_started(:rest)
+    if Rpc.is_offline() do
+      Application.ensure_started(:rest)
+    else
+      Application.put_env(:sentry, :tags, %{node: node()})
+    end
+    Rpc.rest_alive?()
+    |> startup()
+  end
+
+  defp startup(true) do
+    Logger.info("Starting gateway application")
 
     %{"shards" => shard_count, "url" => url} = Rpc.Rest.gateway_bot!()
 
@@ -28,5 +39,14 @@ defmodule Gateway.Application do
 
     opts = [strategy: :one_for_one, name: Gateway.Supervisor]
     Supervisor.start_link(children, opts)
+  end
+
+  defp startup(false) do
+    Logger.warn("#{Rpc.rest()} node is not alive, waiting 10 seconds and trying again")
+
+    Process.sleep(10_000)
+
+    Rpc.rest_alive?()
+    |> startup()
   end
 end

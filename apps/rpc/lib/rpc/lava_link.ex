@@ -13,7 +13,7 @@ defmodule Rpc.LavaLink do
   end
 
   def forward(data) do
-    do_rpc()
+    do_rpc([data])
   end
 
   def resolve_identifier_and_fetch_tracks(identifier, requester) when is_local() do
@@ -25,12 +25,16 @@ defmodule Rpc.LavaLink do
   end
 
   def resolve_identifier_and_fetch_tracks(identifier, requester) do
-    do_rpc()
+    do_rpc([identifier, requester])
   end
 
   @impl true
   def register(guild_id, channel_id, shard_id) when is_local() do
     send_call(guild_id, {:register, {channel_id, shard_id}})
+  end
+
+  def register(guild_id, channel_id, shard_id) do
+    do_rpc([guild_id, channel_id, shard_id])
   end
 
   @impl true
@@ -43,7 +47,7 @@ defmodule Rpc.LavaLink do
   end
 
   def play(guild_id, tracks) when is_list(tracks) do
-    do_rpc()
+    do_rpc([guild_id, tracks])
   end
 
   @impl true
@@ -52,7 +56,7 @@ defmodule Rpc.LavaLink do
   end
 
   def skip(guild_id, count) do
-    do_rpc()
+    do_rpc([guild_id, count])
   end
 
   @impl true
@@ -61,7 +65,7 @@ defmodule Rpc.LavaLink do
   end
 
   def remove(guild_id, position, count) do
-    do_rpc()
+    do_rpc([guild_id, position, count])
   end
 
   @impl true
@@ -70,7 +74,7 @@ defmodule Rpc.LavaLink do
   end
 
   def loop(guild_id) do
-    do_rpc()
+    do_rpc([guild_id])
   end
 
   @impl true
@@ -79,7 +83,7 @@ defmodule Rpc.LavaLink do
   end
 
   def loop(guild_id, new_state) do
-    do_rpc()
+    do_rpc([guild_id, new_state])
   end
 
   @impl true
@@ -88,7 +92,7 @@ defmodule Rpc.LavaLink do
   end
 
   def shuffle(guild_id) do
-    do_rpc()
+    do_rpc([guild_id])
   end
 
   @impl true
@@ -97,7 +101,7 @@ defmodule Rpc.LavaLink do
   end
 
   def pause(guild_id) do
-    do_rpc()
+    do_rpc([guild_id])
   end
 
   @impl true
@@ -106,7 +110,7 @@ defmodule Rpc.LavaLink do
   end
 
   def resume(guild_id) do
-    do_rpc()
+    do_rpc([guild_id])
   end
 
   # summon
@@ -117,7 +121,7 @@ defmodule Rpc.LavaLink do
   end
 
   def now_playing(guild_id) do
-    do_rpc()
+    do_rpc([guild_id])
   end
 
   @impl true
@@ -126,7 +130,7 @@ defmodule Rpc.LavaLink do
   end
 
   def queue(guild_id) do
-    do_rpc()
+    do_rpc([guild_id])
   end
 
   @impl true
@@ -135,7 +139,7 @@ defmodule Rpc.LavaLink do
   end
 
   def volume(guild_id) do
-    do_rpc()
+    do_rpc([guild_id])
   end
 
   @impl true
@@ -144,7 +148,7 @@ defmodule Rpc.LavaLink do
   end
 
   def volume(guild_id, new_volume) do
-    do_rpc()
+    do_rpc([guild_id, new_volume])
   end
 
   defp send_command(guild_id, command) do

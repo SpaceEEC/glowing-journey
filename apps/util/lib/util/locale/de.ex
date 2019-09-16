@@ -12,7 +12,7 @@ defmodule Util.Locale.DE do
     - `avatar 218348062828003328`
     - `avatar @space#0001`
     - `avatar space`
-    """,
+    """
   }
 
   @blacklist %{

@@ -12,6 +12,8 @@ defmodule Bot.MixProject do
     ]
   end
 
+  @cookie "DFW6GOl6zh81fM0r9y7yrirTv2FhjtM9bAu2-X7Qn0GRrubawwxFyQ=="
+
   defp releases do
     [
       all_in_one: [
@@ -22,7 +24,12 @@ defmodule Bot.MixProject do
           worker: :permanent,
           lavalink: :permanent
         ]
-      ]
+      ],
+      rest: [cookie: @cookie, applications: [rest: :permanent]],
+      gateway: [cookie: @cookie, applications: [gateway: :permanent]],
+      cache: [cookie: @cookie, applications: [cache: :permanent]],
+      worker: [cookie: @cookie, applications: [worker: :permanent]],
+      lavalink: [cookie: @cookie, applications: [lavalink: :permanent]]
     ]
   end
 

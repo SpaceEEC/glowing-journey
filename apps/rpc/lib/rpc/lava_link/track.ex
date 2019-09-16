@@ -6,7 +6,7 @@ defmodule Rpc.LavaLink.Track do
   end
 
   def to_embed(track, type) do
-    do_rpc()
+    do_rpc([track, type])
   end
 
   def to_length(track) when is_local() do
@@ -14,7 +14,7 @@ defmodule Rpc.LavaLink.Track do
   end
 
   def to_length(track) do
-    do_rpc()
+    do_rpc([track])
   end
 
   def to_markdown_uri(track) when is_local() do
@@ -22,7 +22,7 @@ defmodule Rpc.LavaLink.Track do
   end
 
   def to_markdown_uri(track) do
-    do_rpc()
+    do_rpc([track])
   end
 
   def format_milliseconds(millis) when is_local() do
@@ -30,6 +30,6 @@ defmodule Rpc.LavaLink.Track do
   end
 
   def format_milliseconds(millis) do
-    do_rpc()
+    do_rpc([millis])
   end
 end

@@ -9,7 +9,7 @@ defmodule Rpc.Rest do
   end
 
   def request(request) do
-    do_rpc()
+    do_rpc([request])
   end
 
   def request!(request) when is_local() do
@@ -17,6 +17,6 @@ defmodule Rpc.Rest do
   end
 
   def request!(request) do
-    do_rpc()
+    do_rpc([request])
   end
 end

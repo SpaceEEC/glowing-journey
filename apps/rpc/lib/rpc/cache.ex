@@ -9,13 +9,13 @@ defmodule Rpc.Cache do
     ensure_loaded(Crux.Cache.User).me()
   end
 
-  def me(), do: do_rpc()
+  def me(), do: do_rpc([])
 
   def me!() when is_local() do
     ensure_loaded(Crux.Cache.User).me!()
   end
 
-  def me!(), do: do_rpc()
+  def me!(), do: do_rpc([])
 
   # Helper
   def get_channels(ids) when is_local() and is_list(ids) do
@@ -28,7 +28,7 @@ defmodule Rpc.Cache do
   end
 
   def get_channels(ids) when is_list(ids) do
-    do_rpc()
+    do_rpc([])
   end
 
   # General cache api, all caches implement them
@@ -39,7 +39,7 @@ defmodule Rpc.Cache do
   end
 
   def delete(type, id) when type in @types do
-    do_rpc()
+    do_rpc([type, id])
   end
 
   def fetch(type, id) when is_local() and type in @types do
@@ -49,7 +49,7 @@ defmodule Rpc.Cache do
   end
 
   def fetch(type, id) when type in @types do
-    do_rpc()
+    do_rpc([type, id])
   end
 
   def fetch!(type, id) when is_local() and type in @types do
@@ -59,7 +59,7 @@ defmodule Rpc.Cache do
   end
 
   def fetch!(type, id) when type in @types do
-    do_rpc()
+    do_rpc([type, id])
   end
 
   def insert(type, data) when is_local() and type in @types do
@@ -69,7 +69,7 @@ defmodule Rpc.Cache do
   end
 
   def insert(type, data) when type in @types do
-    do_rpc()
+    do_rpc([type, data])
   end
 
   def update(type, data) when is_local() and type in @types do
@@ -79,7 +79,7 @@ defmodule Rpc.Cache do
   end
 
   def update(type, data) when type in @types do
-    do_rpc()
+    do_rpc([[type, data]])
   end
 
   # Not strictly cache, but in the same node
@@ -88,5 +88,5 @@ defmodule Rpc.Cache do
     Base |> Crux.Base.producers() |> Map.values()
   end
 
-  def producers(), do: do_rpc()
+  def producers(), do: do_rpc([])
 end

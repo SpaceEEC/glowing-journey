@@ -9,7 +9,7 @@ defmodule Rpc.Gateway do
   end
 
   def voice_state_update(shard_id, guild_id, channel_id, states) do
-    do_rpc()
+    do_rpc([shard_id, guild_id, channel_id, states])
   end
 
   def send_command(shard_id, command) when is_local() do
@@ -18,6 +18,6 @@ defmodule Rpc.Gateway do
   end
 
   def send_command(shard_id, command) do
-    do_rpc()
+    do_rpc([shard_id, command])
   end
 end

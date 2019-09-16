@@ -15,13 +15,13 @@ defmodule Rpc do
   def lavalink(), do: @lavalink
   def worker(), do: @worker
 
-  def cache_alive?(), do: Node.ping(@cache) == :pong
-  def gateway_alive?(), do: Node.ping(@gateway) == :pong
-  def rest_alive?(), do: Node.ping(@rest) == :pong
-  def lavalink_alive?(), do: Node.ping(@lavalink) == :pong
-  def worker_alive?(), do: Node.ping(@worker) == :pong
-
   defguard is_offline() when node() in [@no_node, @single_node]
+
+  def cache_alive?(), do: is_offline() or Node.ping(@cache) == :pong
+  def gateway_alive?(), do: is_offline() or Node.ping(@gateway) == :pong
+  def rest_alive?(), do: is_offline() or Node.ping(@rest) == :pong
+  def lavalink_alive?(), do: is_offline() or Node.ping(@lavalink) == :pong
+  def worker_alive?(), do: is_offline() or Node.ping(@worker) == :pong
 
   defmacro __using__(type) when type in [:cache, :gateway, :rest, :lavalink, :worker] do
     quote location: :keep do
@@ -39,7 +39,7 @@ defmodule Rpc do
 
         Uses `:rpc.call/4` behind the scenes.
       """
-      defmacro do_rpc() do
+      defmacro do_rpc(args) do
         quote do
           {mod, _arity} = __ENV__.function()
 
@@ -47,11 +47,7 @@ defmodule Rpc do
             unquote(@local_node),
             __MODULE__,
             mod,
-            unquote(
-              __CALLER__
-              |> Macro.Env.vars()
-              |> Enum.map(&(&1 |> elem(0) |> Macro.var(nil)))
-            )
+            unquote(args)
           )
         end
       end
@@ -95,7 +91,7 @@ defmodule Rpc do
       {:badrpc, reason} ->
         raise RpcError, [
           """
-          received an unexpected ":badrcp"
+          received an unexpected ":badrpc"
           #{inspect(reason)}
           target:
           #{node}

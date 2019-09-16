@@ -22,7 +22,8 @@ defmodule Worker.Command.Misc.Ping do
     ping_message = Rest.create_message!(message, response)
 
     ping_time =
-      Snowflake.deconstruct(ping_message).timestamp - Snowflake.deconstruct(message).timestamp
+      Snowflake.deconstruct(ping_message.id).timestamp -
+        Snowflake.deconstruct(message.id).timestamp
 
     response =
       Locale.localize_response(
