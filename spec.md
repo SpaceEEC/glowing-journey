@@ -22,7 +22,7 @@ Description: Sets, gets, or delete a key in the configuration.
 
 Syntax: `config <key> <action> [value]`
 
-`<key>`: `joinmessage` | `leavemessage` | `joinchannel` | `leavechannel` | `voicelogchannel` | `djrole` | `djchannel` | `prefix` | `locale`
+`<key>`: `joinmessage` | `leavemessage` | `joinchannel` | `leavechannel` | `voicelogchannel` | `djrole` | `djchannel` | `volume` | `prefix` | `locale`
 
 `<action>`: `set` | `get` | `delete`
 
@@ -134,6 +134,12 @@ Syntax: `save`
 
 
 ## Misc
+
+#### `avatar`
+
+Description: Shows the avatar of the requested user.
+
+Syntax `avatar <User>`
 
 #### `help`
 
