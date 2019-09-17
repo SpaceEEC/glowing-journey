@@ -9,15 +9,31 @@ defmodule LavaLink.Rest do
     Application.fetch_env!(:lavalink, :lavalink_authorization)
   end
 
-  def resolve_identifier(url) do
-    # Strip <> to avoid embeds in Discord
-    [_, url] = Regex.run(~r{^<?(.+?)>?$}, url)
+  def resolve_identifier("scsearch:" <> _ = identifier) do
+    identifier
+  end
 
-    if Regex.match?(~r{^https?://}, url) do
-      url
-    else
-      "ytsearch:#{url}"
-    end
+  def resolve_identifier("ytsearch:" <> _ = identifier) do
+    identifier
+  end
+
+  def resolve_identifier("http://" <> _ = url) do
+    url
+  end
+
+  def resolve_identifier("https://" <> _ = url) do
+    url
+  end
+
+  def resolve_identifier("<" <> _ = identifier)
+      when binary_part(identifier, byte_size(identifier) - 1, 1) == ">" do
+    identifier
+    |> binary_part(1, byte_size(identifier) - 2)
+    |> resolve_identifier()
+  end
+
+  def resolve_identifier(other) do
+    "ytsearch:#{other}"
   end
 
   def fetch_tracks(identifier, requester) do
@@ -82,6 +98,16 @@ defmodule LavaLink.Rest do
          requester
        ) do
     Track.create(track, requester)
+  end
+
+  defp handle_response(
+         %{
+           "loadType" => "SEARCH_RESULT",
+           "tracks" => []
+         },
+         _requester
+       ) do
+    []
   end
 
   defp handle_response(

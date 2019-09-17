@@ -12,7 +12,7 @@ defmodule Worker.Command.Music.Play do
   def examples(), do: Template.play_examples()
 
   @impl true
-  def triggers(), do: ["play"]
+  def triggers(), do: ["play", "soundcloud"]
 
   @impl true
   def required() do
@@ -39,6 +39,7 @@ defmodule Worker.Command.Music.Play do
           args: args,
           message: %{author: author, guild_id: guild_id, channel_id: channel_id},
           shard_id: shard_id,
+          trigger: trigger,
           assigns: %{guild: %{voice_states: voice_states}}
         } = command,
         _
@@ -47,6 +48,7 @@ defmodule Worker.Command.Music.Play do
 
     response =
       query
+      |> maybe_apply_prefix(trigger)
       |> LavaLink.resolve_identifier_and_fetch_tracks(author)
       |> case do
         {:error, error} ->
@@ -75,5 +77,15 @@ defmodule Worker.Command.Music.Play do
       end
 
     set_response(command, response)
+  end
+
+  defp maybe_apply_prefix(query, trigger)
+
+  defp maybe_apply_prefix(query, "soundcloud") do
+    "scsearch:#{query}"
+  end
+
+  defp maybe_apply_prefix(query, _trigger) do
+    query
   end
 end

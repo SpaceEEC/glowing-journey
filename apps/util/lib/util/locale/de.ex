@@ -288,19 +288,21 @@ defmodule Util.Locale.DE do
 
   @play %{
     PLAY_DESCRIPTION: """
-    Spiele einen Titel oder Playlist via Video- oder Playlist url sowie Suchbegriffe
+    Spiele einen Titel oder Playlist via Video- oder Playlist url sowie Suchbegriffe.
     """,
     PLAY_USAGES: """
     **Anwendungen**:
-    - `play <...Search>`
+    - `play <...Suche>`
     - `play <Video-URL>`
     - `play <Playlist-URL>`
+    - `soundcloud <...Suche>`
     """,
     PLAY_EXAMPLES: """
     **Beispiele**:
     - `play harito geist`
     - `play https://www.youtube.com/watch?v=xbx_t3YA9qQ`
     - `play https://www.youtube.com/playlist?list=PLLAAisT6WX23GeuJ44f0OLWAIygqQopck`
+    - `soundcloud Some Artist and Song`
     """,
     PLAY_NOTHING_FOUND: "Ich konnte nichts finden.",
     PLAY_START: "Starte die Wiedergabe..."

@@ -291,12 +291,14 @@ defmodule Util.Locale.EN do
     - `play <...Search>`
     - `play <Video-URL>`
     - `play <Playlist-URL>`
+    - `soundcloud <...Search>`
     """,
     PLAY_EXAMPLES: """
     **Examples**:
     - `play harito geist`
     - `play https://www.youtube.com/watch?v=xbx_t3YA9qQ`
     - `play https://www.youtube.com/playlist?list=PLLAAisT6WX23GeuJ44f0OLWAIygqQopck`
+    - `soundcloud Some Song and Artist`
     """,
     PLAY_NOTHING_FOUND: "I fear I could not find any results.",
     PLAY_START: "Starting playback..."
