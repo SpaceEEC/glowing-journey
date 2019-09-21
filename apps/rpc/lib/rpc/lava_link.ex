@@ -2,7 +2,7 @@ defmodule Rpc.LavaLink do
   use Rpc, :lavalink
   require Rpc
 
-  @behaviour Rpc.Player.Commands
+  @behaviour Rpc.LavaLink.Commands
 
   def forward(data) when is_local() do
     require Logger

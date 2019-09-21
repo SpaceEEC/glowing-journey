@@ -1,4 +1,4 @@
-defmodule Rpc.Player.Commands do
+defmodule Rpc.LavaLink.Commands do
   @type guild_id :: Crux.Rest.snowflake()
   @type track :: LavaLink.Track.t()
   @type tracks :: [track]
