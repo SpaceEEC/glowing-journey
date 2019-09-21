@@ -195,7 +195,7 @@ defmodule LavaLink.Player do
     message =
       if track do
         position = Track.format_milliseconds(track.position)
-        length = Track.to_length(track)
+        length = Locale.localize(Locale.EN, Track.to_length(track))
         base <> "#{position} / #{length}"
       else
         base <> "no track data available"
