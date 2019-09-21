@@ -6,9 +6,9 @@ defmodule Worker.Command.Hidden.Blacklist do
   @impl true
   def description(), do: "The global blacklist."
   @impl true
-  def usages(), do: "Usage: `hiddenblacklist [remove] [UserID|GuildID]`"
+  def usages(), do: "Usage: `globalblacklist [remove] [UserID|GuildID]`"
   @impl true
-  def examples(), do: "Example: `hiddenblacklist`"
+  def examples(), do: "Example: `globalblacklist`"
 
   @impl true
   def triggers(), do: ["globalblacklist"]
