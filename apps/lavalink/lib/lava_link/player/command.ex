@@ -12,7 +12,7 @@ defmodule LavaLink.Player.Command do
   #           message: nil
 
   alias ExLink.Message
-  alias LavaLink.Player
+  alias LavaLink.{Player, Track}
 
   def play([first | _] = tracks, %Player{queue: queue, guild_id: guild_id} = state) do
     start = :queue.is_empty(queue)
@@ -47,6 +47,28 @@ defmodule LavaLink.Player.Command do
     |> Player.send_message()
 
     {:reply, skipped, state}
+  end
+
+  def seek(position, %Player{queue: queue, guild_id: guild_id} = state) do
+    response =
+      case :queue.peek(queue) do
+        :empty ->
+          {:error, :empty}
+
+        {:value, %Track{is_seekable: false}} ->
+          {:error, :not_seekable}
+
+        {:value, %Track{length: length}} when length < position ->
+          {:error, :out_of_bounds}
+
+        {:value, _} ->
+          Message.seek(position, guild_id)
+          |> Player.send_message()
+
+          :ok
+      end
+
+    {:reply, response, state}
   end
 
   def remove(position, count, %Player{queue: queue} = state)

@@ -72,7 +72,13 @@ Syntax: `stop`
 
 Description: Skips the first `<Count>` tracks. Defaults to 1.
 
-Syntax: `skip <Count>`
+Syntax: `skip [Count]`
+
+#### `seek`
+
+Description: Seeks to the given `<Position>`.
+
+Syntax: `seek <Position>`
 
 #### `remove`
 

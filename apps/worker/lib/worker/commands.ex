@@ -48,6 +48,7 @@ defmodule Worker.Commands do
     Command.Music.Remove,
     Command.Music.Resume,
     Command.Music.Save,
+    Command.Music.Seek,
     Command.Music.Shuffle,
     Command.Music.Skip,
     Command.Music.Stop,

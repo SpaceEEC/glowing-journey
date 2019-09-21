@@ -60,6 +60,15 @@ defmodule Rpc.LavaLink do
   end
 
   @impl true
+  def seek(guild_id, position) when is_local() do
+    send_command(guild_id, {:seek, position})
+  end
+
+  def seek(guild_id, position) do
+    do_rpc([guild_id, position])
+  end
+
+  @impl true
   def remove(guild_id, position, count) when is_local() do
     send_command(guild_id, {:remove, {position, count}})
   end

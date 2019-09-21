@@ -381,6 +381,27 @@ defmodule Util.Locale.DE do
     SAVE_EXAMPLES: "**Beispiel**: `save`"
   }
 
+  @seek %{
+    SEEK_DESCRIPTION: "Spule den aktuellen Titel vor oder zurück.",
+    SEEK_USAGES: "**Anwendung**: `seek <Position>`",
+    SEEK_EXAMPLES: """
+    **Beispiele**:
+    - `seek 250` (Sekunden)
+    - `seek 2:23` (mm:ss)
+    - `seek 1:00:23` (hh:mm:ss)
+    """,
+    SEEK_SEEKING: "Spule...",
+    SEEK_EMPTY: "Im Moment wird nichts gespielt, kein Spulen möglich.",
+    SEEK_NOT_SEEKABLE: "Dieser Titel unterstützt kein Spulen.",
+    SEEK_OUT_OF_BOUNDS: """
+    Du kannst nicht so weit spulen, du solltest innerhalb der Spieldauer des Titels bleiben.
+    """,
+    SEEK_NAN: """
+    Ich konnte das nicht als Position intepretieren.
+    Nutze `help seek` für Beispiele.
+    """
+  }
+
   @shuffle %{
     SHUFFLE_DESCRIPTION: "Mische die Warteschlange.",
     SHUFFLE_USAGES: "**Anwendung**: `shuffle`",
@@ -498,6 +519,7 @@ defmodule Util.Locale.DE do
                 |> Map.merge(@remove, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@resume, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@save, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@seek, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@shuffle, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@skip, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@stop, &Util.Locale.raise_duplicate_key/3)

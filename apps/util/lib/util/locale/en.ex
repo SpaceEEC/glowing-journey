@@ -369,9 +369,30 @@ defmodule Util.Locale.EN do
   }
 
   @save %{
-    SAVE_DESCRIPTION: "Send the currently played track to your dms.",
+    SAVE_DESCRIPTION: "Save the currently played track to your dms.",
     SAVE_USAGES: "**Usage**: `save`",
     SAVE_EXAMPLES: "**Example**: `save`"
+  }
+
+  @seek %{
+    SEEK_DESCRIPTION: "Seek to somewhere in the current track.",
+    SEEK_USAGES: "**Usage**: `seek <Position>`",
+    SEEK_EXAMPLES: """
+    **Examples**:
+    - `seek 250` (seconds)
+    - `seek 2:23` (mm:ss)
+    - `seek 1:00:23` (hh:mm:ss)
+    """,
+    SEEK_SEEKING: "Seeking...",
+    SEEK_EMPTY: "The queue is empty, nothing to seek.",
+    SEEK_NOT_SEEKABLE: "This track can not be seeked.",
+    SEEK_OUT_OF_BOUNDS: """
+    You can't seek that far. I suggest to stay inside of the duration of the song.
+    """,
+    SEEK_NAN: """
+    Could not interpret that as a position.
+    Try `help seek` for a few examples.
+    """
   }
 
   @shuffle %{
@@ -491,6 +512,7 @@ defmodule Util.Locale.EN do
                 |> Map.merge(@remove, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@resume, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@save, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@seek, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@shuffle, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@skip, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@stop, &Util.Locale.raise_duplicate_key/3)

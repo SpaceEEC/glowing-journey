@@ -10,6 +10,8 @@ defmodule Rpc.Player.Commands do
 
   @callback play(guild_id, tracks) :: {start :: boolean, tracks}
   @callback skip(guild_id, count :: pos_integer) :: tracks
+  @callback seek(guild_id, position :: pos_integer) ::
+              :ok | {:error, :empty | :not_seekable | :out_of_bounds}
   @callback remove(guild_id, position :: pos_integer, count :: pos_integer) :: tracks | nil
   @callback loop(guild_id) :: boolean
   @callback loop(guild_id, new_state :: boolean) :: boolean
