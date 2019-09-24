@@ -40,7 +40,6 @@ defmodule Worker.Handler.JoinLeaveMessage do
          {:ok, channel} <- channel,
          {:ok, guild} <- guild do
       Sentry.Context.set_user_context(%{
-        message_id: message.id,
         user_id: user.id,
         channel_id: channel.id,
         guild_id: guild.id
