@@ -67,7 +67,7 @@ defmodule Worker.MiddleWare.FetchMember do
       member = %{member | guild_id: guild.id}
       guild = %{guild | members: &Map.put(&1, user.id, member)}
 
-      assign(command, :guild, guild)
+      command = assign(command, :guild, guild)
       Cache.insert(Guild, member)
 
       add_member(command, message, member)
