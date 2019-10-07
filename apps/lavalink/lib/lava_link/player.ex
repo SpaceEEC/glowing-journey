@@ -41,10 +41,28 @@ defmodule LavaLink.Player do
     Connection.send(__MODULE__.name(), message)
   end
 
-  def init(client, guild_id)
-      when not is_nil(client) and not is_nil(guild_id) do
+  # Debug thing, hopefully this helps.
+  # Nothing like debuggin in prod.
+  def init(client, guild_id) do
+    try do
+      _init(client, guild_id)
+    rescue
+      e ->
+        Sentry.capture_exception(e,
+          stacktrace: __STACKTRACE__,
+          tags: %{
+            guild_id: guild_id
+          }
+        )
+
+        {:stop, e}
+    end
+  end
+
+  defp _init(client, guild_id)
+       when not is_nil(client) and not is_nil(guild_id) do
     Rpc.Sentry.debug(
-      "[---------------------------------------] INIT #{inspect(self())} [---------------------------------------]",
+      "[---------------------------------------] INIT #{inspect(self())} #{guild_id} [---------------------------------------]",
       "player"
     )
 
@@ -238,7 +256,7 @@ defmodule LavaLink.Player do
           "byRemote" => by_remote,
           "code" => code
         },
-        state
+        %{guild_id: guild_id} = state
       ) do
     Rpc.Sentry.warn(
       """
@@ -251,7 +269,7 @@ defmodule LavaLink.Player do
     )
 
     Rpc.Sentry.debug(
-      "[---------------------------------------] STOP #{inspect(self())} [---------------------------------------]",
+      "[---------------------------------------] STOP #{inspect(self())} #{guild_id} [---------------------------------------]",
       "player"
     )
 

@@ -6,7 +6,7 @@
   "crux_gateway": {:hex, :crux_gateway, "0.2.2", "f07199f739d1507de5d04244c606eee3243f36b097ec204fc3e4b16f074133e3", [:mix], [{:gen_stage, "~> 0.13.1", [hex: :gen_stage, repo: "hexpm", optional: false]}, {:poison, "~> 3.1.0", [hex: :poison, repo: "hexpm", optional: false]}, {:websockex, "~> 0.4.1", [hex: :websockex, repo: "hexpm", optional: false]}], "hexpm"},
   "crux_rest": {:git, "https://github.com/spaceeec/crux_rest.git", "23deae35b2fb62a55e0f3ec491fbdfa0d6c8807a", []},
   "crux_structs": {:hex, :crux_structs, "0.2.1", "17c625b94b9807fceccd94219d4b7495529f65528aef64bea54f68dbb9398264", [:mix], [], "hexpm"},
-  "ex_link": {:git, "https://github.com/spaceeec/ex_link.git", "8c5f9dae38384ec2e98b23f2c843ad1aac91459d", []},
+  "ex_link": {:git, "https://github.com/spaceeec/ex_link.git", "283937d77069c2bde76b2c9dca0e7bf2398b26f7", []},
   "gen_stage": {:hex, :gen_stage, "0.13.1", "edff5bca9cab22c5d03a834062515e6a1aeeb7665fb44eddae086252e39c4378", [:mix], [], "hexpm"},
   "hackney": {:hex, :hackney, "1.15.1", "9f8f471c844b8ce395f7b6d8398139e26ddca9ebc171a8b91342ee15a19963f4", [:rebar3], [{:certifi, "2.5.1", [hex: :certifi, repo: "hexpm", optional: false]}, {:idna, "6.0.0", [hex: :idna, repo: "hexpm", optional: false]}, {:metrics, "1.0.1", [hex: :metrics, repo: "hexpm", optional: false]}, {:mimerl, "~>1.1", [hex: :mimerl, repo: "hexpm", optional: false]}, {:ssl_verify_fun, "1.1.4", [hex: :ssl_verify_fun, repo: "hexpm", optional: false]}], "hexpm"},
   "httpoison": {:hex, :httpoison, "1.5.1", "0f55b5b673b03c5c327dac7015a67cb571b99b631acc0bc1b0b98dcd6b9f2104", [:mix], [{:hackney, "~> 1.8", [hex: :hackney, repo: "hexpm", optional: false]}], "hexpm"},
