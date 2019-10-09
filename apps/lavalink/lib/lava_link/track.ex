@@ -41,13 +41,10 @@ defmodule LavaLink.Track do
     struct(__MODULE__, data)
   end
 
-  # :end
-  # :pause
-  # :play
-  # :save
-  # :add
-  # :now_playing
-  @spec to_embed(t(), type :: atom()) :: Crux.Rest.embed()
+  @spec to_embed(
+      t(),
+      type :: :end | :pause | :play | :save | :add | :now_playing
+    ) :: Crux.Rest.embed()
   def to_embed(
         %__MODULE__{
           requester: %{username: username, discriminator: discriminator, id: id} = requester
