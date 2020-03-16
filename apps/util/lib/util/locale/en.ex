@@ -123,6 +123,11 @@ defmodule Util.Locale.EN do
     """
   }
 
+  @disabled %{
+    COMMAND_DISABLED: "This command is currently disabled.",
+    MUSIC_DISABLED: "Music functionality is currently disabled."
+  }
+
   @dj %{
     DJ_CHANNEL: "This command may only be used in the dj channel: {{channel}}.",
     DJ_ROLE: "This command may only be used by members of the dj role: {{role}}."
@@ -490,6 +495,7 @@ defmodule Util.Locale.EN do
                 |> Map.merge(@config, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@configstatus, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@connected, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@disabled, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@dj, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@eval, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@fetchguild, &Util.Locale.raise_duplicate_key/3)

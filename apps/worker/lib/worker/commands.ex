@@ -220,17 +220,50 @@ defmodule Worker.Commands do
   defp run_command({command_mod, command_arg}, %Crux.Extensions.Command{} = command) do
     Code.ensure_loaded(command_mod)
 
-    if function_exported?(command_mod, :required, 0) do
-      Enum.reduce(command_mod.required(), command, &run_command/2)
-    else
-      command
-    end
+    command
+    |> ensure_enabled(command_mod)
+    |> run_required(command_mod)
     |> case do
       %{halted: true} = command ->
         command
 
       command ->
         command_mod.call(command, command_arg)
+    end
+  end
+
+  defp ensure_enabled(%{halted: true} = command, _command_mod), do: command
+
+  defp ensure_enabled(command, command_mod) do
+    if function_exported?(command_mod, :disabled, 0) do
+      import Crux.Extensions.Command
+
+      case command_mod.disabled() do
+        false ->
+          command
+
+        true ->
+          command
+          |> set_response(content: Util.Locale.Template.command_disabled())
+          |> halt()
+
+        other ->
+          command
+          |> set_response(content: other)
+          |> halt()
+      end
+    else
+      command
+    end
+  end
+
+  defp run_required(%{halted: true} = command, _command_mod), do: command
+
+  defp run_required(command, command_mod) do
+    if function_exported?(command_mod, :required, 0) do
+      Enum.reduce(command_mod.required(), command, &run_command/2)
+    else
+      command
     end
   end
 

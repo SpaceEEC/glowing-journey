@@ -125,6 +125,11 @@ defmodule Util.Locale.DE do
     """
   }
 
+  @disabled %{
+    COMMAND_DISABLED: "Dieser Befehlt ist momentan deaktiviert.",
+    MUSIC_DISABLED: "Musikfunktionalität ist momentan deaktiviert."
+  }
+
   @dj %{
     DJ_CHANNEL: "Dieser Befehl kann nur im DJ Channel ausgeführt werden: {{channel}}.",
     DJ_ROLE: "Dieser Befehl kann nur von Nutzern mit der DJ Rolle ausgeführt werden: {{role}}."
@@ -497,6 +502,7 @@ defmodule Util.Locale.DE do
                 |> Map.merge(@config, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@configstatus, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@connected, &Util.Locale.raise_duplicate_key/3)
+                |> Map.merge(@disabled, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@dj, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@eval, &Util.Locale.raise_duplicate_key/3)
                 |> Map.merge(@fetchguild, &Util.Locale.raise_duplicate_key/3)

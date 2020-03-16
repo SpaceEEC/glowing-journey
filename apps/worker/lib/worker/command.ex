@@ -14,4 +14,7 @@ defmodule Worker.Command do
   @callback description() :: Util.Locale.localizable()
   @callback usages() :: Util.Locale.localizable()
   @callback examples() :: Util.Locale.localizable()
+  @callback disabled() :: boolean() | Util.Locale.localizable()
+
+  @optional_callbacks disabled: 0
 end
