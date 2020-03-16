@@ -10,6 +10,9 @@ defmodule Worker.Command.Music.Pause do
   @impl true
   def examples(), do: Template.pause_examples()
   @impl true
+  def disabled(), do: Template.music_disabled()
+
+  @impl true
   def triggers(), do: ["pause"]
   @impl true
   def required(),

@@ -35,14 +35,14 @@ defmodule Worker do
     Worker.Handler.JoinLeaveMessage.handle_remove(%{user: user_id, guild_id: guild_id})
   end
 
-  def handle_event({:VOICE_SERVER_UPDATE, data, _shard_id}) do
-    Rpc.LavaLink.forward(data)
-  end
+  # def handle_event({:VOICE_SERVER_UPDATE, data, _shard_id}) do
+  #   Rpc.LavaLink.forward(data)
+  # end
 
   def handle_event({:VOICE_STATE_UPDATE, {old_state, new_state}, _shard_id}) do
-    new_state
-    |> Map.from_struct()
-    |> Rpc.LavaLink.forward()
+    # new_state
+    # |> Map.from_struct()
+    # |> Rpc.LavaLink.forward()
 
     Worker.Handler.VoiceLog.handle(old_state, new_state)
   end

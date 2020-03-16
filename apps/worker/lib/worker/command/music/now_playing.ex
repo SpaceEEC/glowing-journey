@@ -10,6 +10,8 @@ defmodule Worker.Command.Music.NowPlaying do
   def usages(), do: Template.nowplaying_usages()
   @impl true
   def examples(), do: Template.nowplaying_examples()
+  @impl true
+  def disabled(), do: Template.music_disabled()
 
   @impl true
   def triggers(), do: ["nowplaying", "np"]

@@ -10,6 +10,8 @@ defmodule Worker.Command.Music.Volume do
   def usages(), do: Template.volume_usages()
   @impl true
   def examples(), do: Template.volume_examples()
+  @impl true
+  def disabled(), do: Template.music_disabled()
 
   @impl true
   def required(), do: [MiddleWare.GuildOnly, {MiddleWare.Connected, :volume}]

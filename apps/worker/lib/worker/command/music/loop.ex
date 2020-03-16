@@ -9,6 +9,8 @@ defmodule Worker.Command.Music.Loop do
   def usages(), do: Template.loop_usages()
   @impl true
   def examples(), do: Template.loop_examples()
+  @impl true
+  def disabled(), do: Template.music_disabled()
 
   @impl true
   def triggers(), do: ["loop"]

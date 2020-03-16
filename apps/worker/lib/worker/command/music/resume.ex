@@ -10,6 +10,9 @@ defmodule Worker.Command.Music.Resume do
   @impl true
   def examples(), do: Template.resume_examples()
   @impl true
+  def disabled(), do: Template.music_disabled()
+
+  @impl true
   def triggers(), do: ["resume"]
   @impl true
   def required(),

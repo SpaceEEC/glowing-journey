@@ -9,6 +9,8 @@ defmodule Worker.Command.Music.Remove do
   def usages(), do: Template.remove_usages()
   @impl true
   def examples(), do: Template.remove_examples()
+  @impl true
+  def disabled(), do: Template.music_disabled()
 
   @impl true
   def triggers(), do: ["remove"]

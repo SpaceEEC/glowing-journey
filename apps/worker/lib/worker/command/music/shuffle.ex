@@ -10,6 +10,9 @@ defmodule Worker.Command.Music.Shuffle do
   @impl true
   def examples(), do: Template.shuffle_examples()
   @impl true
+  def disabled(), do: Template.music_disabled()
+
+  @impl true
   def triggers(), do: ["shuffle"]
   @impl true
   def required(),

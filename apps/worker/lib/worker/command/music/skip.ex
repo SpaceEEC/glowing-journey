@@ -9,6 +9,8 @@ defmodule Worker.Command.Music.Skip do
   def usages(), do: Template.skip_usages()
   @impl true
   def examples(), do: Template.skip_examples()
+  @impl true
+  def disabled(), do: Template.music_disabled()
 
   @impl true
   def triggers(), do: ["skip"]

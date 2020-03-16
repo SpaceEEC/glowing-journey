@@ -10,6 +10,8 @@ defmodule Worker.Command.Music.Save do
   def usages(), do: Template.save_usages()
   @impl true
   def examples(), do: Template.save_examples()
+  @impl true
+  def disabled(), do: Template.music_disabled()
 
   @impl true
   def triggers(), do: ["save"]

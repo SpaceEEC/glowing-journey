@@ -9,6 +9,8 @@ defmodule Worker.Command.Music.Seek do
   def usages(), do: Template.seek_usages()
   @impl true
   def examples(), do: Template.seek_examples()
+  @impl true
+  def disabled(), do: Template.music_disabled()
 
   @impl true
   def triggers(), do: ["seek"]

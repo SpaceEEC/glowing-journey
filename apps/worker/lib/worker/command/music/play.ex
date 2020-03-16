@@ -10,6 +10,9 @@ defmodule Worker.Command.Music.Play do
   def usages(), do: Template.play_usages()
   @impl true
   def examples(), do: Template.play_examples()
+  @impl true
+  def disabled(), do: Template.music_disabled()
+
 
   @impl true
   def triggers(), do: ["play", "soundcloud"]

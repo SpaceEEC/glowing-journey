@@ -7,6 +7,8 @@ defmodule Worker.Command.Music.Stop do
   def usages(), do: Template.stop_usages()
   @impl true
   def examples(), do: Template.stop_examples()
+  @impl true
+  def disabled(), do: Template.music_disabled()
 
   @impl true
   def triggers(), do: ["stop", "leave"]
