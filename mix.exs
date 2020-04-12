@@ -41,7 +41,8 @@ defmodule Bot.MixProject do
   defp deps do
     [
       # TODO: remove once >= 0.2.1 released
-      {:crux_rest, github: "spaceeec/crux_rest", override: true}
+      {:crux_rest, github: "spaceeec/crux_rest", override: true},
+      {:httpoison, "~> 1.6.2", override: true}
     ]
   end
 
